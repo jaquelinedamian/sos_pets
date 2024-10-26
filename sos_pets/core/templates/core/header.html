@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+ 
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>SOS PETS</title>
+ {% load static %}  <!-- Carregar as tags estáticas -->
+ <!-- Bootstrap CSS -->
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+ <!-- Arquivos CSS personalizados (se houver) -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap-grid.css' %}">
+<link rel="stylesheet" href="{% static 'css/headers.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/headers/">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+    }
+    
+    header {
+        background-color: #00C3DD;
+        padding: 10px;
+        color: white;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .menu {
+        display: flex;
+        list-style: none;
+        padding-top:20px ;
+    }
+    
+    .menu li {
+        margin-left: 20px;
+    }
+    
+    .menu a {
+        text-decoration: none;
+        color: white;
+        line-height: 30px;
+        padding: 10px;
+    }
+    
+    .menu-icon {
+        display: none;
+        font-size: 28px;
+        cursor: pointer;
+    }
+    
+    #menu-toggle {
+        display: none;
+    }
+    
+    /* Estilos para telas menores */
+    @media (max-width: 768px) {
+        .menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #333;
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .menu li a {
+            margin: 10px 0;
+    
+        }
+    
+    
+        #menu-toggle:checked + .menu-icon + .menu {
+            display: flex;
+        }
+    
+        .menu-icon {
+            display: block;
+        }
+    }
+    
+    
+    
+</style>
+</head>
+    <header>
+        <div class="container">
+        <nav>
+            <div class="logo"><img src="{% static 'img/logo-branco.png' %}" alt="Logo sos pets">
+            </div>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+            <ul class="menu">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'cadastro' %}">Cadastro</a></li>
+                <li><a href="{% url 'vitrine' %}">Vitrine de Pets</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            </ul>
+
+
+        </nav>
+        </div>
+    </header>

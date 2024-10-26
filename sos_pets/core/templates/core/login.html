@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    {% load static %}  <!-- Carregar as tags estáticas -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Arquivos CSS personalizados (se houver) -->
+     <link rel="stylesheet" href="{% static 'css/bootstrap-grid.css' %}">
+   <link rel="stylesheet" href="{% static 'css/headers.css' %}">
+     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+
+
+</head>
+<body>
+
+  {% include 'sos_pets/header.html' %}
+
+<h1>login</h1>
+
+    <div class="container">
+        <h1>Bem-vindo ao meu projeto Django!</h1>
+        <p>Essa é uma página estática com Bootstrap.</p>
+    </div>
+
+  {{pets}}
+
+    <div class="container">
+
+    <h1>Bootstrap grid examples</h1>
+    <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
+    <p>In these examples the <code>.themed-grid-col</code> class is added to the columns to add some theming. This is not a class that is available in Bootstrap by default.</p>
+
+    <h2 class="mt-4">Five grid tiers</h2>
+    <p>There are five tiers to the Bootstrap grid system, one for each range of devices we support. Each tier starts at a minimum viewport size and automatically applies to the larger devices unless overridden.</p>
+{% for pet in pets%}
+
+        <div class="row mb-3 text-center">
+      <div class="col-4 themed-grid-col">
+          {{pet.nome}}
+       {{pet.tipo}}
+      </div>
+    </div>
+
+{%endfor%}
+    <div class="row mb-3 text-center">
+      <div class="col-4 themed-grid-col">.col-4</div>
+      <div class="col-4 themed-grid-col">.col-4</div>
+      <div class="col-4 themed-grid-col">.col-4</div>
+    </div>
+
+    <div class="row mb-3 text-center">
+      <div class="col-sm-4 themed-grid-col">.col-sm-4</div>
+      <div class="col-sm-4 themed-grid-col">.col-sm-4</div>
+      <div class="col-sm-4 themed-grid-col">.col-sm-4</div>
+    </div>
+
+    <div class="row mb-3 text-center">
+      <div class="col-md-4 themed-grid-col">.col-md-4</div>
+      <div class="col-md-4 themed-grid-col">.col-md-4</div>
+      <div class="col-md-4 themed-grid-col">.col-md-4</div>
+    </div>
+
+    <div class="row mb-3 text-center">
+      <div class="col-lg-4 themed-grid-col">.col-lg-4</div>
+      <div class="col-lg-4 themed-grid-col">.col-lg-4</div>
+      <div class="col-lg-4 themed-grid-col">.col-lg-4</div>
+    </div>
+
+    <div class="row mb-3 text-center">
+      <div class="col-xl-4 themed-grid-col">.col-xl-4</div>
+      <div class="col-xl-4 themed-grid-col">.col-xl-4</div>
+      <div class="col-xl-4 themed-grid-col">.col-xl-4</div>
+    </div>
+
+    <div class="row mb-3 text-center">
+      <div class="col-xxl-4 themed-grid-col">.col-xxl-4</div>
+      <div class="col-xxl-4 themed-grid-col">.col-xxl-4</div>
+      <div class="col-xxl-4 themed-grid-col">.col-xxl-4</div>
+    </div>
+    </div>
+
+
+
+    {% include 'sos_pets/footer.html' %}
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="{% static 'js/bootstrap.bundle.js' %}">
+</body>
+</html>
