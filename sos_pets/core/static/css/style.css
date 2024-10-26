@@ -1,13 +1,18 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f9f9f9;
+}
 
-  * {
+
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    color: #828282;
 }
 
-body {
-    font-family: Arial, sans-serif;
-}
 
 header {
     background-color: #00C3DD;
@@ -82,3 +87,72 @@ nav {
 }
 
 
+.form-container form {   }
+
+.form-container {
+   
+    margin: 20px auto;
+    padding: 5%;
+    background-color: #ffffff;
+    border-radius: 4px;
+    margin-bottom: 100px;
+}
+
+.form-group {
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group label {
+    padding: 10px 0;
+
+    color: #828282;
+}
+
+
+.form-group input {
+    padding: 10px;
+    color: #5a5959;
+}
+
+.form-control {
+    border: 1px solid #00C3DD !important;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #00C3DD;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+.btn-primary {
+    background-color: #00C3DD!important;
+    border: none;
+    font-weight: bold;
+    border-radius:200px!important;
+    border: 0px!important;
+    padding: 20px!important;
+    width: 100%;
+}
+
+.form-check-input { 
+    border: 1px solid #00C3DD!important;
+    padding-top: 5px!important;
+
+
+}
+
+.btn-primary:hover {
+    background-color:  #00C3DD;
+}
+
+
+footer { 
+    position: fixed; 
+    bottom: 0; 
+    background: #f9f9f9; 
+    width: 100%;
+    display: block;
+    padding: 20px;
+
+}
