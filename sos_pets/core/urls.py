@@ -32,5 +32,15 @@ urlpatterns = [
     path('faq/', views.faq, name='faq'),
     path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios')
 
-
+    # path('', views.home, name='home'),
+    # path('cadastro/', views.cadastro, name='cadastro'),
+    # path('cadastro-pets/', views.cadastro_pets, name='cadastro_pets'),
+    # # Defina as demais rotas
+    # path('busca/', views.busca, name='busca'),
+    # path('login/', views.login, name='login'),
+    # path('anuncios/', views.anuncios, name='anuncios'),
+    # path('vitrine-detalhes/', views.vitrine_detalhes, name='vitrine_detalhes'),
+    # path('conta/', views.conta, name='conta'),
+    # path('faq/', views.faq, name='faq'),
+    # path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios')
 ]

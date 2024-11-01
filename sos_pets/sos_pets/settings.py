@@ -81,6 +81,21 @@ WSGI_APPLICATION = 'sos_pets.wsgi.application'
 #     }
 # }
 
+DEFAULT_CHARSET = 'utf-8'
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'sos_pets',
+#         'USER': 'postgres',
+#         'PASSWORD': 'teste50',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#         # 'OPTIONS': {
+#         #     'charset': 'utf-8',
+#         # }
+#     }
+# }
 
 DATABASES = {
     'default': {
@@ -90,10 +105,12 @@ DATABASES = {
         'PASSWORD': 'teste50',
         'HOST': 'localhost',
         'PORT': '5432',
+ #        'OPTIONS':  
+ # {
+ #            'charset': 'utf-8',
+ #        }
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -136,3 +153,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
