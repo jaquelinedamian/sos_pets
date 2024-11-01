@@ -1,13 +1,18 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f9f9f9;
+}
 
-  * {
+
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    color: #828282;
 }
 
-body {
-    font-family: Arial, sans-serif;
-}
 
 header {
     background-color: #00C3DD;
@@ -82,3 +87,186 @@ nav {
 }
 
 
+.form-container form {   }
+
+.form-container {
+   
+    margin: 20px auto;
+    padding: 5%;
+    background-color: #ffffff;
+    border-radius: 4px;
+    margin-bottom: 100px;
+}
+
+
+
+.form-group {
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group label {
+    padding: 10px 0;
+
+    color: #828282;
+}
+
+
+.form-group input {
+    padding: 10px;
+    color: #5a5959;
+}
+
+.form-control {
+    border: 1px solid #00C3DD !important;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #00C3DD;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+.btn-primary {
+    background-color: #00C3DD!important;
+    border: none;
+    font-weight: bold;
+    border-radius:200px!important;
+    border: 0px!important;
+    width: 100%;
+}
+
+.form-check-input { 
+    border: 1px solid #00C3DD!important;
+    margin-top: 15px;
+    margin-right: 10px;
+
+}
+
+.btn-primary:hover {
+    background-color:  #00C3DD;
+}
+
+
+footer { 
+    position: fixed; 
+    bottom: 0; 
+    background: #f9f9f9; 
+    width: 100%;
+    display: block;
+    padding: 20px;
+    margin-top: 200px;
+
+}
+
+.encontrado {
+    font-size: medium;
+    color: #000;
+    border: 1px solid #00dd88;
+    padding: 10px;
+    background: #91fdd4;
+  }
+
+
+.perdido {
+    font-size: medium;
+    color: #000;
+    border: 1px solid #fbc8b7;
+    padding: 10px;
+    background: #f7aa90;
+}
+
+
+.carousel-indicators li {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #00C3DD;
+}
+
+/* Indicador ativo com cor diferenciada */
+.carousel-indicators .active {
+    background-color: #00C3DD;
+}
+
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+    color: #fff!important;
+    background-color: #00C3DD!important;
+    border-color: #00C3DD!important;
+   
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #00C3DD!important;
+    --bs-btn-border-color: #00C3DD!important;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #00C3DD!important;
+    --bs-btn-hover-border-color: #00C3DD!important;
+    --bs-btn-focus-shadow-rgb: 13, 110, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #00C3DD!important;
+    --bs-btn-active-border-color: #00C3DD!important;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #00C3DD!important;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color:#00C3DD!important;
+    --bs-gradient: none;
+    --bs-btn-border-radius: 100px!important;
+    
+}
+
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #00C3DD;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            margin-top: -50px;
+        }
+        .info-section {
+            padding: 20px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-data {
+            color: #00C3DD;
+        }
+        .btn-link {
+            color: #00C3DD;
+            text-decoration: none;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+        .btn-custom {
+            background-color: #00C3DD;
+            color: white;
+            border-radius: 100px;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+        }
+        .btn-custom:hover {
+            background-color: #00A5BB;
+        }
+
+
+
+        

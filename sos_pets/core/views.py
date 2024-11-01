@@ -1,9 +1,8 @@
 # core/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib import messages
-from .forms import UsuarioForm  # Certifique-se de que isso está correto
-from .models import Usuarios
+from .forms import UserProfileForm  # Certifique-se de que isso está correto
+from .models import UserProfile
 
 
 def home(request):
@@ -19,6 +18,10 @@ def vitrine(request):
 def login(request):
     return render(request, 'core/login.html')  # Certifique-se de que o template existe
 
+
+
+from django.contrib import messages
+from .models import UserProfile
 
 def cadastro(request):
     if request.method == 'POST':
@@ -38,7 +41,7 @@ def cadastro(request):
         user = User.objects.create_user(username=username, password=password, email=email)
         
         # Cria o perfil do usuário
-        Usuarios.objects.create(user=user, nome=nome, email=email, telefone=telefone, rede_social=rede_social)
+        UserProfile.objects.create(user=user, nome=nome, email=email, telefone=telefone, rede_social=rede_social)
 
         messages.success(request, "Cadastro realizado com sucesso!")
         return redirect('home')  # Redireciona para a página inicial
