@@ -17,7 +17,7 @@
       <div class="row mb-3 text-center">
         <div class="col-4 themed-grid-col"><a href="{% url 'login' %}"><img src="{% static 'img/Login.png' %}" alt="Logo sos pets"  width="70%"></a></div>
         <div class="col-4 themed-grid-col"><a href="{% url 'cadastro' %}"><img src="{% static 'img/Cadastro.png' %}" alt="Logo sos pets"  width="70%"></a></div>
-        <div class="col-4 themed-grid-col"><a href="{% url 'vitrine' %}"><img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+        <div class="col-4 themed-grid-col"><a href="{% url 'busca' %}"><img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets"  width="70%"></a></div>
       </div>
 
       
@@ -27,16 +27,7 @@
 
 
 
-  {{pets}}
 
-{% for pet in pets%}
-
-       
-          {{pet.nome}}
-       {{pet.tipo}}
-  
-{%endfor%}
-  
 
     {% include 'core/footer.html' %}
 
