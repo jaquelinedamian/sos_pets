@@ -1,8 +1,8 @@
 # core/forms.py
 from django import forms
-from .models import UserProfile
+from .models import Usuarios
 
-class UserProfileForm(forms.ModelForm):
+class UsuarioForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = Usuarios
         fields = ['nome', 'email', 'telefone', 'rede_social', 'image']  # Exclua 'user'

@@ -86,8 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sos_pets',
-        'USER': 'admin',
-        'PASSWORD': '12345',
+        'USER': 'postgres',
+        'PASSWORD': 'teste50',
         'HOST': 'localhost',
         'PORT': '5432',
     }
