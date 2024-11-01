@@ -1,0 +1,131 @@
+{% load static %}  <!-- Carregar as tags estáticas -->
+{% include 'core/header.html' %}
+
+
+<div class="container mt-5">
+    <h1 class="mb-4">Detalhes do Pet</h1>
+    <div class="row">
+        <!-- Coluna do Carrossel -->
+        <div class="col-md-6">    
+            
+            <div id="petCarousel" class="carousel slide mb-4 shadow-sm" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'img/Dog.png' %}" class="d-block w-100 rounded" alt="Foto 1 do Pet" style="height: 300px; object-fit: cover;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'img/Dog.png' %}" class="d-block w-100 rounded" alt="Foto 2 do Pet" style="height: 300px; object-fit: cover;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'img/Dog.png' %}" class="d-block w-100 rounded" alt="Foto 3 do Pet" style="height: 300px; object-fit: cover;">
+                    </div>
+                </div>
+                <br>
+                <a class="carousel-control-prev" href="#petCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon bg-azu" aria-hidden="true"></span><br>
+                    <span class="sr-only bg-azu">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#petCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span><br>
+                    <span class="sr-only">Próximo</span>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Coluna de Informações -->
+        <div class="col-md-6">
+
+            <div class="row mt-3">
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                    <h3 class="h6">Nome</h3>
+                    <h2>Lulu</h2>
+                </div>
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                    <p class="perdido rounded text-bg-success">Cachorro encontrado</p>
+                </div>
+            </div>
+
+         
+            <div class="row mt-3">
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                    <h3 class="h6">Data</h3>
+                    <p>12/2/2024</p>
+                </div>
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                    <h3 class="h6">Localização:</h3>
+                    <p>Bairro, Cidade</p>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+
+                    <h3 class="h6">Porte:</h3>
+                    <p>Pequeno</p>
+                </div>
+                <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+
+                    <h3 class="h6">Cor:</h3>
+                    <p>Caramelo</p>
+                </div>
+            </div>
+
+          
+
+        </div>
+    </div>
+    <div class="row">
+    <div class="mt-3">
+        <h3 class="h6">Detalhes:</h3>
+        <p>Lulu, anda mancando, pois tem uma patinha menos que a outra. Encontramos ele na rua Oswaldo Cruz e parecia desorientado.  </p>
+    </div>
+
+
+    <div class="row mt-3">
+       <p> Voce encontrou o Lulu? Entre em contato.</p>
+        <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+
+            <h3 class="h6">E-mail do tutor</h3>
+            <p>tuto@tutor.com.br</p>
+        </div>
+        <div class="col-6 col-sm-6	col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+
+            <h3 class="h6">Telefone do tutor</h3>
+            <p>+55 11 1234-1234</p>
+        </div>
+    </div>
+
+
+</div>
+
+<br><br>
+    <!-- Mapa de Localização -->
+     <h2>Veja a àrea onde foi encontrado</h2>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div id="map" class="shadow-sm rounded" style="height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+<script>
+    function initMap() {
+        const localizacao = { lat: -23.5505, lng: -46.6333 };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: localizacao
+        });
+        new google.maps.Marker({
+            position: localizacao,
+            map: map,
+            title: "Localização do Pet"
+        });
+    }
+</script>
+
+
+{% include 'core/footer.html' %}

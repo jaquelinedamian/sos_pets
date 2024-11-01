@@ -1,0 +1,25 @@
+{% load static %}
+
+{% include 'core/header.html' %}
+    <div class="container mt-5">
+        <h1 class="text-center">Pets Encontrados e Perdidos</h1>
+        <div class="row">
+          
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ pet.foto1.url }}" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <p class="card-text">Tipo: </p>
+                            <p class="card-text">ID do Anúncio: </p>
+                            <p class="card-text">Status: </p>
+                            <p class="card-text">Data: </p>
+                            <p class="card-text">Localização: </p>
+                            <a href="{% url 'detalhes_pet' pet.id %}" class="btn btn-primary">Anúncio Completo</a>
+                        </div>
+                    </div>
+                </div>
+           
+        </div>
+    </div>
+    {% include 'core/footer.html' %}
