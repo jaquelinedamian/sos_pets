@@ -30,7 +30,10 @@ urlpatterns = [
     path('vitrine-detalhes/', views.vitrine_detalhes, name='vitrine_detalhes'), 
     path('conta/', views.conta, name='conta'), 
     path('faq/', views.faq, name='faq'),
-    path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios')
+    path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios'),
+    path('sucesso/', views.sucesso, name='sucesso')
+
+
 
     # path('', views.home, name='home'),
     # path('cadastro/', views.cadastro, name='cadastro'),
