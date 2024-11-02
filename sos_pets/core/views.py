@@ -6,6 +6,10 @@ from .models import Usuario
 from django.contrib import messages
 
 
+
+def sucesso(request):
+  return render(request, 'core/sucesso.html')
+
 def home(request):
   return render(request, 'core/home.html')
 
