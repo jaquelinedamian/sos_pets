@@ -1,10 +1,15 @@
 # core/views.py
+from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .forms import UsuarioForm  # Certifique-se de que isso está correto
 from .models import Usuario
 from django.contrib import messages
 
+
+
+def sucesso(request):
+  return render(request, 'core/sucesso.html')
 
 def home(request):
   return render(request, 'core/home.html')
@@ -35,23 +40,19 @@ def meus_anuncios(request):
 
 def cadastro(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        senha = request.POST['senha']
         nome = request.POST['nome']
         email = request.POST['email']
         telefone = request.POST['telefone']
         rede_social = request.POST.get('rede_social', '')
 
-        # Verifica se o nome de usuário já existe
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Nome de usuário já existe.")
-            return render(request, 'core/cadastro.html')
 
-        # Cria o usuário
-        user = User.objects.create_user(username=username, password=password, email=email)
+
+        # Cria o usuário usando o email como username
+        user = User.objects.create_user(username=email,  email=email, password=senha)
 
         # Cria o perfil do usuário
-        Usuario.objects.create(user=user, nome=nome, email=email, telefone=telefone, rede_social=rede_social)
+        Usuario.objects.create(nome=nome, email=email, telefone=telefone, rede_social=rede_social)
 
         messages.success(request, "Cadastro realizado com sucesso!")
         return redirect('home')  # Redireciona para a página inicial

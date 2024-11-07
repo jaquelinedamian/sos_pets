@@ -114,7 +114,8 @@ nav {
 
 .form-group input {
     padding: 10px;
-    color: #5a5959;
+    color: #5a5959!important;
+    width: 100%!important;
 }
 
 .form-control {
