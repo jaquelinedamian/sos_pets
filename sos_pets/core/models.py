@@ -53,6 +53,7 @@ class Pet(models.Model):
     imagem2 = models.ImageField(upload_to='pets/', blank=True, null=True)
     imagem3 = models.ImageField(upload_to='pets/', blank=True, null=True)
 
+
     def __str__(self):
         return f'{self.nome} - {self.tipo}'
 
