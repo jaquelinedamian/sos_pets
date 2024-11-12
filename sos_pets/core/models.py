@@ -24,6 +24,8 @@ class Usuario(models.Model):
 
 
 
+
+
 class Pet(models.Model):
     TIPOS_CHOICES = [
         ('perdido', 'Perdido'),

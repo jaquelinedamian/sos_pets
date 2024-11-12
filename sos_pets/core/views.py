@@ -7,14 +7,22 @@ from .models import Pet
 from django.contrib import messages
 from .forms import PetForm  # Supondo que você tenha um ModelForm baseado no modelo Pet
 from django.utils import timezone
+from .models import Pet  # ou o modelo correto que você está usando
+
 
 
 
 def sucesso(request):
   return render(request, 'core/sucesso.html')
 
+#def home(request):
+#  return render(request, 'core/home.html')
+
 def home(request):
-  return render(request, 'core/home.html')
+    pet = Pet.objects.first()  # Pega o primeiro pet, ou ajusta a lógica conforme necessário
+    return render(request, 'core/home.html', {'pet': pet})
+
+
 
 def busca(request):
   return render(request, 'core/busca.html')
@@ -66,6 +74,8 @@ def cadastro(request):
 def cadastro_pets__(request):
   return render(request, 'core/cadastro-pets.html')
 
+def detalhes_usuario(request):
+  return render(request, 'core/detalhes_usuario.html')
 
 
 
@@ -114,3 +124,46 @@ def cadastro_pets(request):
 
 
 
+#####################
+from django.shortcuts import render, get_object_or_404
+from .models import Usuario  # Importe o modelo do usuário
+
+
+def detalhes_usuario(request, user_id):
+    # Busca o usuário pelo ID
+    usuario = get_object_or_404(Usuario, id=user_id)
+
+    # Envia os dados do usuário para o template
+    return render(request, 'detalhes_usuario.html', {'usuario': usuario})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Pet  # Certifique-se de que o modelo Pet está importado
+
+def detalhes_pet(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)  # Busca o pet pelo ID
+    return render(request, 'core/detalhes_pet.html', {'pet': pet})
+
+
+from .models import Usuario, Pet  # Importando o modelo Pet
+
+def listar_usuarios(request):
+    usuarios = Usuario.objects.all()  # Obtém todos os usuários
+    pets = Pet.objects.all()  # Obtém todos os pets
+    return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios, 'pets': pets})
+
+def pets(request, pet_id):
+    try:
+        pets = Pet.objects.all()  # Obtém todos os pets
+    except Pet.DoesNotExist:
+        pet = None  # Caso o pet não exista, pode passar um valor padrão ou mensagem
+    return render(request, 'core/pets.html', {'pets': pets})
+
+
+def detalhes_pet(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+    return render(request, 'core/detalhes_pet.html', {'pet': pet})
+
+def lista_pets(request):
+    pets = Pet.objects.all()  # Obtém todos os pets cadastrados
+    return render(request, 'core/lista_pets.html', {'pets': pets})

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Pet</title>
+    <style>
+        /* Carrossel básico */
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+        .carousel img {
+            width: 300px;
+            height: auto;
+            margin-right: 16px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalhes do {{ pet.nome }}</h1>
+
+    bla vla vla val
+    <div class="carousel">
+        <img src="{{ pet.imagem_1.url }}" alt="Imagem 1 do {{ pet.nome }}">
+        <img src="{{ pet.imagem_2.url }}" alt="Imagem 2 do {{ pet.nome }}">
+        <img src="{{ pet.imagem_3.url }}" alt="Imagem 3 do {{ pet.nome }}">
+    </div>
+
+    <ul>
+        <li>Status: {{ pet.status }}</li>
+        <li>Tipo: {{ pet.tipo }}</li>
+        <li>Nome: {{ pet.nome }}</li>
+        <li>Espécie: {{ pet.especie }}</li>
+        <li>Porte: {{ pet.porte }}</li>
+        <li>Cor: {{ pet.cor }}</li>
+        <li>Detalhes: {{ pet.detalhes }}</li>
+        <li>Data e Hora: {{ pet.data_hora }}</li>
+        <li>Localização: {{ pet.localizacao }}</li>
+    </ul>
+
+    <a href="{% url 'lista_usuarios' %}" class="button">Voltar</a>
+</body>
+</html>

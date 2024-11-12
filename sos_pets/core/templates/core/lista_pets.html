@@ -1,0 +1,115 @@
+{% include 'core/header.html' %}
+{% load static %} <!-- Carregar as tags estáticas -->
+
+<div class="container form-container">
+    <h1>Pets Cadastrados</h1>
+    <div class="pets-container">
+        <div class="row">
+            {% for pet in pets %}
+                <div class="col col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                    <div class="card px-4 p-3">
+                        <!-- Carrossel Bootstrap para as imagens do pet -->
+                        <div id="carousel-{{ pet.id }}" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ pet.imagem_principal.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                                </div>
+
+                            
+                                {% if pet.imagem_1 %}
+                                    <div class="carousel-item">
+                                        <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                                    </div>
+                                {% endif %}
+                                {% if pet.imagem_2 %}
+                                    <div class="carousel-item">
+                                        <img src="{{ pet.imagem2.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                                    </div>
+                                {% endif %}
+                                {% if pet.imagem_3 %}
+                                    <div class="carousel-item">
+                                        <img src="{{ pet.imagem3.url}}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                                    </div>
+                                {% endif %}
+                                <!-- Adicione mais ifs se tiver mais imagens -->
+                            </div>
+                            <!-- Controles do carrossel -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ pet.id }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ pet.id }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Próximo</span>
+                            </button>
+                        </div>
+
+                        <h3> {{ pet.nome }}</h3> 
+                        
+                        <div class="d-flex">
+                            {% if pet.tipo == 'encontrado' %}
+                                <span class="btn btn-success px-3">{{ pet.tipo|title }}</span>
+                            {% elif pet.tipo == 'perdido' %}
+                                <span class="btn btn-danger px-3">{{ pet.tipo|title }}</span>
+                            {% else %}
+                                <span class="btn btn-secondary px-3">{{ pet.tipo|title }}</span>
+                            {% endif %}
+                        </div>
+
+                        <br>
+                        <p>Detalhes: {{ pet.detalhes }}</p>
+                        <p>Localização: {{ pet.localizacao }}</p>
+                        <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
+
+                   
+                   
+                    </div>
+                </div>
+            {% empty %}
+                <p>Nenhum pet encontrado.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div id="petModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+      
+        <div id="modalContent">
+            
+             
+         
+            
+            
+            
+        </div>
+    </div>
+</div>
+
+<!-- Estilo do Modal -->
+ <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+
+<!-- Script para Abrir e Fechar o Modal -->
+<script>
+    function openModal(petId) {
+        fetch(`/detalhes_pet/${petId}/`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('modalContent').innerHTML = data;
+                document.getElementById('petModal').style.display = 'block';
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('petModal').style.display = 'none';
+    }
+</script>
+
+
+
+{% include 'core/footer.html' %}
