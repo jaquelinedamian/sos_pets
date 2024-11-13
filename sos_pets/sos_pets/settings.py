@@ -160,4 +160,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Diretório onde as imagens são 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+LOCATIONIQ_API_KEY = os.getenv('LOCATIONIQ_API_KEY')
