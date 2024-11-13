@@ -1,0 +1,42 @@
+<!-- core/templates/core/mapa_pets.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa de Pets</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Mapa de Pets</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializa o mapa com localização padrão
+        var map = L.map('map').setView([-23.5505, -46.6333], 12);
+
+        // Adiciona o tile da LocationIQ
+        L.tileLayer(`https://maps.locationiq.com/v3/streets/vector/{z}/{x}/{y}.png?key=pk.227bb16be8af10a97550047d4932e148`, {
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Adiciona um marcador para cada pet
+        var pets = {{ pets|safe }};
+        pets.forEach(pet => {
+            if (pet.latitude && pet.longitude) {
+                L.marker([pet.latitude, pet.longitude]).addTo(map)
+                    .bindPopup(`<b>${pet.nome}</b><br>Tipo: ${pet.tipo}`);
+            }
+        });
+    </script>
+</body>
+</html>

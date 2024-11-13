@@ -54,6 +54,8 @@ urlpatterns = [
 
     path('detalhes_pet/<int:pet_id>/', views.detalhes_pet, name='detalhes_pet'),
 
+    path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
+
 ]
 
 

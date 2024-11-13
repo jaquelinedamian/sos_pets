@@ -1,19 +1,20 @@
 {% include 'core/header.html' %}
 {% load static %} <!-- Carregar as tags estáticas -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
 <div class="container">
    <div class="form-container">
       <h1>Cadastro de Pet</h1>
       <p>Preencha as informações abaixo para cadastrar um pet.</p>
       <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-         <div class="container ">
-
+         <div class="container">
             <div class="row">
-                
-                <div class="col-sm-6">       
-                <img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets"  width="70%">
-            </div>
+               <div class="col-sm-6">       
+                  <img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets" width="70%">
+               </div>
                <div class="col-sm-6">
+                  <!-- Dados do Pet -->
                   <div class="form-group">
                      <label for="tipo">Tipo:</label>
                      <select id="tipo" name="tipo" class="form-control" required>
@@ -24,7 +25,7 @@
                   </div>
                   <div class="form-group">
                      <label for="nome">Nome do Pet:</label>
-                     <input type="text" id="nome" name="nome" class="form-control" required>
+                     <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome do pet" required>
                   </div>
                   <div class="form-group">
                      <label for="especie">Espécie:</label>
@@ -45,11 +46,11 @@
                   </div>
                   <div class="form-group">
                      <label for="cor">Cor:</label>
-                     <input type="text" id="cor" name="cor" class="form-control" required>
+                     <input type="text" id="cor" name="cor" class="form-control" placeholder="Cor do pet" required>
                   </div>
                   <div class="form-group">
                      <label for="detalhes">Detalhes:</label>
-                     <textarea id="detalhes" name="detalhes" class="form-control" required></textarea>
+                     <textarea id="detalhes" name="detalhes" class="form-control" placeholder="Detalhes adicionais sobre o pet" required></textarea>
                   </div>
                   <div class="form-group">
                      <label for="data_hora">Data e Hora:</label>
@@ -57,8 +58,19 @@
                   </div>
                   <div class="form-group">
                      <label for="localizacao">Localização:</label>
-                     <input type="text" id="localizacao" name="localizacao" class="form-control" required>
+                     <input type="text" id="localizacao" name="localizacao" class="form-control" placeholder="Local onde o pet foi visto" required>
                   </div>
+                  <!-- Contato do Tutor -->
+                  <div class="form-group">
+                     <label for="email_contato">Email de Contato:</label>
+                     <input type="email" id="email_contato" name="email_contato" class="form-control" placeholder="Email do tutor" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="telefone_contato">Telefone de Contato:</label>
+                     <input type="tel" id="telefone_contato" name="telefone_contato" class="form-control" placeholder="Telefone do tutor" required>
+                  </div>
+                  <!-- Imagens do Pet -->
+                  <h5>Imagens do Pet</h5>
                   <div class="form-group">
                      <label for="imagem1">Imagem 1:</label>
                      <input type="file" id="imagem1" name="imagem1" class="form-control" accept="image/*">
@@ -71,7 +83,11 @@
                      <label for="imagem3">Imagem 3:</label>
                      <input type="file" id="imagem3" name="imagem3" class="form-control" accept="image/*">
                   </div>
-               <br>
+                  <!-- Campos de Latitude e Longitude -->
+                  <input type="hidden" id="id_latitude" name="latitude">
+                  <input type="hidden" id="id_longitude" name="longitude">
+                  <br>
+                  <div id="map"></div>
                   <button type="submit" class="btn btn-primary btn-block">Cadastrar Pet</button>
                   {% if messages %}
                   <ul class="mt-3">
@@ -86,4 +102,42 @@
       </form>
    </div>
 </div>
+
+<!-- Carregar o Leaflet -->
+
+<style>
+    #map {
+        width: 100%;
+        height: 400px;
+        margin-top: 20px;
+    }
+</style>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Inicializa o mapa com localização padrão
+    var map = L.map('map').setView([-23.5505, -46.6333], 12);
+
+    // Adiciona o tile da LocationIQ
+    L.tileLayer(`https://maps.locationiq.com/v3/streets/vector/{z}/{x}/{y}.png?key=pk.227bb16be8af10a97550047d4932e148`, {
+        maxZoom: 18,
+    }).addTo(map);
+
+    // Marker padrão no centro, atualiza com o clique do usuário
+    var marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
+
+    // Função que atualiza os campos hidden de latitude e longitude
+    function onMapClick(e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById("id_latitude").value = e.latlng.lat;
+        document.getElementById("id_longitude").value = e.latlng.lng;
+    }
+    map.on('click', onMapClick);
+
+    marker.on('dragend', function (e) {
+        document.getElementById("id_latitude").value = e.target.getLatLng().lat;
+        document.getElementById("id_longitude").value = e.target.getLatLng().lng;
+    });
+</script>
+
 {% include 'core/footer.html' %}

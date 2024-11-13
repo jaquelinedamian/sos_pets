@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,4 +163,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Diretório onde as imagens são 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOCATIONIQ_API_KEY = os.getenv('LOCATIONIQ_API_KEY')
+LOCATIONIQ_API_KEY = 'pk.227bb16be8af10a97550047d4932e148'
