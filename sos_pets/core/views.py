@@ -1,50 +1,39 @@
 # core/views.py
-from django.core.validators import validate_email
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib import messages
-from django.utils import timezone
 from .models import Usuario, Pet
-from .forms import UsuarioForm, PetForm
-from django.contrib.auth.decorators import login_required
-
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import PetForm
 
 def sucesso(request):
     return render(request, 'core/sucesso.html')
-
 
 def home(request):
     pet = Pet.objects.first()  # Pega o primeiro pet, ou ajuste conforme necessário
     return render(request, 'core/home.html', {'pet': pet})
 
-
 def busca(request):
     return render(request, 'core/busca.html')
-
 
 def login(request):
     return render(request, 'core/login.html')
 
-
 def anuncios(request):
     return render(request, 'core/anuncios.html')
-
 
 def vitrine_detalhes(request):
     return render(request, 'core/vitrine-detalhes.html')
 
-
 def conta(request):
     return render(request, 'core/conta.html')
-
 
 def faq(request):
     return render(request, 'core/faq.html')
 
-
 def meus_anuncios(request):
     return render(request, 'core/meus-anuncios.html')
-
 
 def cadastro(request):
     if request.method == 'POST':
@@ -64,13 +53,6 @@ def cadastro(request):
         return redirect('home')
 
     return render(request, 'core/cadastro.html')
-
-
-from django.conf import settings
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import PetForm
-
 
 def cadastro_pets(request):
     # Se for um POST, processa o formulário
@@ -95,32 +77,26 @@ def cadastro_pets(request):
         'LOCATIONIQ_API_KEY': settings.LOCATIONIQ_API_KEY  # Passando a chave da API para o template
     })
 
-
 def detalhes_usuario(request, user_id):
     usuario = get_object_or_404(Usuario, id=user_id)
-    return render(request, 'detalhes_usuario.html', {'usuario': usuario})
-
+    return render(request, 'core/detalhes_usuario.html', {'usuario': usuario})
 
 def detalhes_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
     return render(request, 'core/detalhes_pet.html', {'pet': pet})
-
 
 def listar_usuarios(request):
     usuarios = Usuario.objects.all()
     pets = Pet.objects.all()
     return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios, 'pets': pets})
 
-
 def pets(request, pet_id):
     pets = Pet.objects.all()
     return render(request, 'core/pets.html', {'pets': pets})
 
-
 def lista_pets(request):
     pets = Pet.objects.all()
     return render(request, 'core/lista_pets.html', {'pets': pets})
-
 
 def mapa_pets(request):
     pets = Pet.objects.all()
