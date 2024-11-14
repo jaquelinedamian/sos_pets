@@ -1,6 +1,27 @@
 {% include 'core/header.html' %}
 {% load static %} <!-- Carregar as tags estáticas -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa com Pesquisa por Endereço</title>
+
+    <!-- Incluir o Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Incluir o Leaflet Control Geocoder -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
 
 <div class="container">
    <div class="form-container">
@@ -103,19 +124,8 @@
    </div>
 </div>
 
-<!-- Carregar o Leaflet -->
-
-<style>
-    #map {
-        width: 100%;
-        height: 400px;
-        margin-top: 20px;
-    }
-</style>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    // Inicializa o mapa com localização padrão
+    // Inicializa o mapa com a localização padrão
     let map = L.map('map').setView([-23.5505, -46.6333], 12);
 
     // Adiciona a camada de tiles do OpenStreetMap
@@ -123,7 +133,7 @@
         maxZoom: 19,
     }).addTo(map);
 
-    // Marker padrão no centro, atualiza com o clique do usuário
+    // Cria o marcador inicial, que será movido ou atualizado pela pesquisa
     let marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
 
     // Função que atualiza os campos hidden de latitude e longitude
@@ -138,6 +148,19 @@
         document.getElementById("id_latitude").value = e.target.getLatLng().lat;
         document.getElementById("id_longitude").value = e.target.getLatLng().lng;
     });
+
+    // Adiciona o controle de geocodificação (pesquisa por endereço)
+    L.Control.geocoder({
+        defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
+        geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap para geocodificação
+    }).on('markgeocode', function(e) {
+        // Ao buscar o endereço, move o marcador e atualiza as coordenadas
+        let latlng = e.geocode.center;
+        marker.setLatLng(latlng);
+        map.setView(latlng, 14); // Zoma na localização
+        document.getElementById("id_latitude").value = latlng.lat;
+        document.getElementById("id_longitude").value = latlng.lng;
+    }).addTo(map);
 </script>
 
 {% include 'core/footer.html' %}
