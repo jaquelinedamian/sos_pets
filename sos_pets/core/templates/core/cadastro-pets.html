@@ -116,15 +116,15 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
     // Inicializa o mapa com localização padrão
-    var map = L.map('map').setView([-23.5505, -46.6333], 12);
+    let map = L.map('map').setView([-23.5505, -46.6333], 12);
 
-    // Adiciona o tile da LocationIQ
-    L.tileLayer(`https://maps.locationiq.com/v3/streets/vector/{z}/{x}/{y}.png?key=pk.227bb16be8af10a97550047d4932e148`, {
-        maxZoom: 18,
+    // Adiciona a camada de tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
     }).addTo(map);
 
     // Marker padrão no centro, atualiza com o clique do usuário
-    var marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
+    let marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
 
     // Função que atualiza os campos hidden de latitude e longitude
     function onMapClick(e) {
