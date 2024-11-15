@@ -100,9 +100,11 @@ def cadastro_pets(request):
             # Você pode adicionar qualquer lógica extra aqui (como data/hora ou outras verificações)
             pet.save()
             messages.success(request, 'Pet cadastrado com sucesso!')
-            return redirect('core/busca.html')  # Redireciona para a página de sucesso
+            return redirect('/')  # Redireciona para a página de sucesso
         else:
             messages.error(request, 'Erro no cadastro do pet. Verifique as informações e tente novamente.')
+            for field, errors in form.errors.items():
+                print(f"Campo {field}: {errors}")
 
     # Se for um GET, apenas exibe o formulário
     else:
