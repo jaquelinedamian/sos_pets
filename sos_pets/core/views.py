@@ -68,6 +68,9 @@ def meus_anuncios(request):
     return render(request, 'core/meus-anuncios.html')
 
 def cadastro(request):
+    if request.user.is_authenticated:
+        return redirect('conta')
+
     if request.method == 'POST':
         senha = request.POST['senha']
         nome = request.POST['nome']
