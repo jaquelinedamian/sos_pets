@@ -1,95 +1,56 @@
 {% load static %} <!-- Carregar as tags estáticas -->
 {% include 'core/header.html' %}
-<div class="container">
-        <h4>Detalhes da Conta</h4>
-   <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
-            <div class="card-body">
-                <div class="container">
-                <div class="row ">
-                    <div class="col-md-3 ">
-                        <img src="https://via.placeholder.com/120" alt="Imagem de Perfil" class="rounded-circle border border-secondary" style="width: 120px; height: 120px;">
-                    </div>
-                    <div class="info-section">
-                        <h5 class="font-weight-bold">João da Silva</h5>
-                        <p class="text-muted">joao.silva@example.com</p>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-
-
-         <div class=" col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 ">
-            <div class="info-section">
-               <h5 class="font-weight-bold text-secondary">Informações do Cadastro</h5>
-               <ul class="list-group list-group-flush">
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-
-                        Editar Perfil
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="{% url 'meus_anuncios' %}" class="text-primary d-flex align-items-center">
-
-                     Meus Anúncios
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-                        Cadastrar Pet
-                     </a>
-                  </li>
-               </ul>
-            </div>
-        </div>
-
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-          
-               <h5 class="font-weight-bold text-secondary mt-4">Configurações de Conta</h5>
-               <ul class="list-group list-group-flush">
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-
-                        Política de Privacidade
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-
-                        Termos e Condições
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-
-                        Configurações de Privacidade
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-primary d-flex align-items-center">
-
-                        Alterar Senha
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-danger d-flex align-items-center">
-
-                        Excluir Conta
-                     </a>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-danger d-flex align-items-center">
-
-                        Sair da Conta
-                     </a>
-                  </li>
-               </ul>
-            </div>
+<div class="form-container login">
+   <div class="container">
+      <div class="row">
+         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+            <h3>Informações Cadastradas</h3>
+            <p><strong>Nome:</strong> João Silva{{ nome }}</p>
+            <p><strong>Email:</strong> joao.silva@example.com {{ email }}</p>
+            <p><strong>Telefone:</strong> +55 11 1234-1234 {{ telefone }}</p>
+            <p><strong>Rede Social:</strong> @joaosilva32 {{ rede_social }}</p>
+         </div>
+         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+            <h5 class="font-weight-bold text-secondary mt-4">Opções </h5>
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="{% url 'meus_anuncios' %}" class="text-primary d-flex align-items-center">
+                  Meus Anúncios
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-primary d-flex align-items-center">
+                  Política de Privacidade
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-primary d-flex align-items-center">
+                  Termos e Condições
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-primary d-flex align-items-center">
+                  Configurações de Privacidade
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-primary d-flex align-items-center">
+                  Alterar Senha
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-danger d-flex align-items-center">
+                  Excluir Conta
+                  </a>
+               </li>
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="#" class="text-danger d-flex align-items-center">
+                  Sair da Conta
+                  </a>
+               </li>
+            </ul>
          </div>
       </div>
    </div>
-</div>
 </div>
 {% include 'core/footer.html' %}

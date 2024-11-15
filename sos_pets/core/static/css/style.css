@@ -269,5 +269,69 @@ footer {
         }
 
 
-
+   /* Estilo para o carrossel */
+   .carousel {
+   display: flex;
+   overflow-x: auto;
+   scroll-behavior: smooth;
+   margin-bottom: 20px;
+   }
+   .carousel img {
+   width: 300px;
+   height: auto;
+   margin-right: 16px;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   }
+   /* Estilo da lista de detalhes */
+   ul {
+   list-style: none;
+   padding: 0;
+   font-size: 1.1em;
+   }
+   ul li {
+   margin-bottom: 10px;
+   display: flex;
+   align-items: center;
+   }
+   ul li i {
+   margin-right: 10px;
+   color: #00C3DD;
+   }
+   /* Estilo do título e botão */
+   h1 {
+   font-size: 2em;
+   color: #333;
+   margin-bottom: 10px;
+   text-align: center;
+   }
+   .button {
+   display: inline-block;
+   background-color: #00C3DD;
+   color: white;
+   padding: 10px 20px;
+   text-decoration: none;
+   border-radius: 5px;
+   font-size: 1em;
+   text-align: center;
+   margin-top: 20px;
+   display: block;
+   width: fit-content;
+   margin-left: auto;
+   margin-right: auto;
+   }
+   .button:hover {
+   background-color: #00A9B8;
+   }
+   .carousel-inner {
+   width: 100%;
+   max-width: 400px; /* Ajusta a largura do carrossel */
+   margin: 0 auto; /* Centraliza o carrossel */
+   }
+   .carousel-item img {
+   width: 100%;
+   height: 400px; /* Define altura para manter a imagem quadrada */
+   object-fit: cover; /* Garante que a imagem seja centralizada sem deformação */
+   border-radius: 8px;
+   }
         

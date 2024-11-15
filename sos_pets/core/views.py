@@ -15,7 +15,10 @@ def home(request):
     return render(request, 'core/home.html', {'pet': pet})
 
 def busca(request):
-    return render(request, 'core/busca.html')
+    pets = Pet.objects.all()
+    return render(request, 'core/busca.html', {'pets': pets})
+
+
 
 def login(request):
     return render(request, 'core/login.html')
@@ -63,7 +66,7 @@ def cadastro_pets(request):
             # Você pode adicionar qualquer lógica extra aqui (como data/hora ou outras verificações)
             pet.save()
             messages.success(request, 'Pet cadastrado com sucesso!')
-            return redirect('sucesso.html')  # Redireciona para a página de sucesso
+            return redirect('core/busca.html')  # Redireciona para a página de sucesso
         else:
             messages.error(request, 'Erro no cadastro do pet. Verifique as informações e tente novamente.')
 
@@ -83,7 +86,12 @@ def detalhes_usuario(request, user_id):
 
 def detalhes_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    return render(request, 'core/detalhes_pet.html', {'pet': pet})
+    return render(request, 'core/detalhes_pet.html', {
+        'pet': pet,
+        'LOCATIONIQ_API_KEY': settings.LOCATIONIQ_API_KEY  # Passando a chave da API para o template
+    })
+
+
 
 def listar_usuarios(request):
     usuarios = Usuario.objects.all()

@@ -14,29 +14,37 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+    
+    
+    
+    
+    
+    
     <style>
         #map {
             width: 100%;
             height: 400px;
-            margin-top: 20px;
+    
         }
     </style>
 </head>
 
 <div class="container">
    <div class="form-container">
-      <h1>Cadastro de Pet</h1>
-      <p>Preencha as informações abaixo para cadastrar um pet.</p>
+    
       <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="container">
             <div class="row">
-               <div class="col-sm-6">       
-                  <img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets" width="70%">
+               <div class="col-sm-6">
+                   
+                 <img src="{% static 'img/cadastre-pet.png' %}" alt="Logo sos pets"  width="70%">
                </div>
                <div class="col-sm-6">
                   <!-- Dados do Pet -->
                   <div class="form-group">
+                        <h1>Cadastro de Pet</h1>
+                    <p>Preencha as informações abaixo para cadastrar um pet.</p>
                      <label for="tipo">Tipo:</label>
                      <select id="tipo" name="tipo" class="form-control" required>
                         <option value="">Selecione</option>
@@ -109,6 +117,7 @@
                   <input type="hidden" id="id_longitude" name="longitude">
                   <br>
                   <div id="map"></div>
+               <br>
                   <button type="submit" class="btn btn-primary btn-block">Cadastrar Pet</button>
                   {% if messages %}
                   <ul class="mt-3">
@@ -161,6 +170,11 @@
         document.getElementById("id_latitude").value = latlng.lat;
         document.getElementById("id_longitude").value = latlng.lng;
     }).addTo(map);
+    
+    
+    
+    
+    
 </script>
 
 {% include 'core/footer.html' %}
