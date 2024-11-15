@@ -1,16 +1,166 @@
-<!-- core/templates/core/cadastrar_usuario.html -->
-<!DOCTYPE html>
-<html lang="pt">
+{% include 'core/header.html' %}
+{% load static %} <!-- Carregar as tags estáticas -->
+
 <head>
     <meta charset="UTF-8">
-    <title>Cadastrar Usuário</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa com Pesquisa por Endereço</title>
+
+    <!-- Incluir o Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Incluir o Leaflet Control Geocoder -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
-<body>
-    <h2>Cadastro de Usuário</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-</body>
-</html>
+
+<div class="container">
+   <div class="form-container">
+      <h1>Cadastro de Pet</h1>
+      <p>Preencha as informações abaixo para cadastrar um pet.</p>
+      <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-6">       
+                  <img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets" width="70%">
+               </div>
+               <div class="col-sm-6">
+                  <!-- Dados do Pet -->
+                  <div class="form-group">
+                     <label for="tipo">Tipo:</label>
+                     <select id="tipo" name="tipo" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option value="perdido">Perdido</option>
+                        <option value="encontrado">Encontrado</option>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="nome">Nome do Pet:</label>
+                     <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome do pet" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="especie">Espécie:</label>
+                     <select id="especie" name="especie" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option value="cachorro">Cachorro</option>
+                        <option value="gato">Gato</option>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="porte">Porte:</label>
+                     <select id="porte" name="porte" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option value="pequeno">Pequeno</option>
+                        <option value="medio">Médio</option>
+                        <option value="grande">Grande</option>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label for="cor">Cor:</label>
+                     <input type="text" id="cor" name="cor" class="form-control" placeholder="Cor do pet" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="detalhes">Detalhes:</label>
+                     <textarea id="detalhes" name="detalhes" class="form-control" placeholder="Detalhes adicionais sobre o pet" required></textarea>
+                  </div>
+                  <div class="form-group">
+                     <label for="data_hora">Data e Hora:</label>
+                     <input type="datetime-local" id="data_hora" name="data_hora" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="localizacao">Localização:</label>
+                     <input type="text" id="localizacao" name="localizacao" class="form-control" placeholder="Local onde o pet foi visto" required>
+                  </div>
+                  <!-- Contato do Tutor -->
+                  <div class="form-group">
+                     <label for="email_contato">Email de Contato:</label>
+                     <input type="email" id="email_contato" name="email_contato" class="form-control" placeholder="Email do tutor" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="telefone_contato">Telefone de Contato:</label>
+                     <input type="tel" id="telefone_contato" name="telefone_contato" class="form-control" placeholder="Telefone do tutor" required>
+                  </div>
+                  <!-- Imagens do Pet -->
+                  <h5>Imagens do Pet</h5>
+                  <div class="form-group">
+                     <label for="imagem1">Imagem 1:</label>
+                     <input type="file" id="imagem1" name="imagem1" class="form-control" accept="image/*">
+                  </div>
+                  <div class="form-group">
+                     <label for="imagem2">Imagem 2:</label>
+                     <input type="file" id="imagem2" name="imagem2" class="form-control" accept="image/*">
+                  </div>
+                  <div class="form-group">
+                     <label for="imagem3">Imagem 3:</label>
+                     <input type="file" id="imagem3" name="imagem3" class="form-control" accept="image/*">
+                  </div>
+                  <!-- Campos de Latitude e Longitude -->
+                  <input type="hidden" id="id_latitude" name="latitude">
+                  <input type="hidden" id="id_longitude" name="longitude">
+                  <br>
+                  <div id="map"></div>
+                  <button type="submit" class="btn btn-primary btn-block">Cadastrar Pet</button>
+                  {% if messages %}
+                  <ul class="mt-3">
+                     {% for message in messages %}
+                     <li class="text-danger">{{ message }}</li>
+                     {% endfor %}
+                  </ul>
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+
+<script>
+    // Inicializa o mapa com a localização padrão
+    let map = L.map('map').setView([-23.5505, -46.6333], 12);
+
+    // Adiciona a camada de tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Cria o marcador inicial, que será movido ou atualizado pela pesquisa
+    let marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
+
+    // Função que atualiza os campos hidden de latitude e longitude
+    function onMapClick(e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById("id_latitude").value = e.latlng.lat;
+        document.getElementById("id_longitude").value = e.latlng.lng;
+    }
+    map.on('click', onMapClick);
+
+    marker.on('dragend', function (e) {
+        document.getElementById("id_latitude").value = e.target.getLatLng().lat;
+        document.getElementById("id_longitude").value = e.target.getLatLng().lng;
+    });
+
+    // Adiciona o controle de geocodificação (pesquisa por endereço)
+    L.Control.geocoder({
+        defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
+        geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap para geocodificação
+    }).on('markgeocode', function(e) {
+        // Ao buscar o endereço, move o marcador e atualiza as coordenadas
+        let latlng = e.geocode.center;
+        marker.setLatLng(latlng);
+        map.setView(latlng, 14); // Zoma na localização
+        document.getElementById("id_latitude").value = latlng.lat;
+        document.getElementById("id_longitude").value = latlng.lng;
+    }).addTo(map);
+</script>
+
+{% include 'core/footer.html' %}

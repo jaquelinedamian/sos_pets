@@ -5,7 +5,7 @@
 
   {% include 'core/header.html' %}
 
-    <div class="container text-center">
+    <div class="container text-center mb-3">
       <br><br>
         <h1>Bem-vindo ao SOS PETS</h1>
         <h2>Existimos para te ajudar</h2>
@@ -15,9 +15,11 @@
       </div>
       <div class="container">
       <div class="row mb-3 text-center">
-        <div class="col-4 themed-grid-col"><a href="{% url 'login' %}"><img src="{% static 'img/Login.png' %}" alt="Logo sos pets"  width="70%"></a></div>
-        <div class="col-4 themed-grid-col"><a href="{% url 'cadastro' %}"><img src="{% static 'img/Cadastro.png' %}" alt="Logo sos pets"  width="70%"></a></div>
-        <div class="col-4 themed-grid-col"><a href="{% url 'busca' %}"><img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+        <div class="col-3 themed-grid-col"><a href="{% url 'cadastro' %}"><img src="{% static 'img/Cadastro.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+    <div class="col-3 themed-grid-col"><a href="{% url 'cadastro_pets' %}"><img src="{% static 'img/cadastre-pet.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+        <div class="col-3 themed-grid-col"><a href="{% url 'busca' %}"><img src="{% static 'img/Vitrine.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+        <div class="col-3 themed-grid-col"><a href="{% url 'login' %}"><img src="{% static 'img/Login.png' %}" alt="Logo sos pets"  width="70%"></a></div>
+
       </div>
 
       

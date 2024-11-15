@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Pet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Estilo para o carrossel */
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            margin-bottom: 20px;
+        }
+        .carousel img {
+            width: 300px;
+            height: auto;
+            margin-right: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilo da lista de detalhes */
+        ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1.1em;
+        }
+        ul li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        ul li i {
+            margin-right: 10px;
+            color: #00C3DD;
+        }
+
+        /* Estilo do título e botão */
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            background-color: #00C3DD;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
+            margin-top: 20px;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .button:hover {
+            background-color: #00A9B8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Detalhes do {{ pet.nome }}</h1>
+
+        <!-- Carrossel de imagens -->
+        <div class="carousel">
+            <img src="{{ pet.imagem_1.url }}" alt="Imagem 1 do {{ pet.nome }}">
+            <img src="{{ pet.imagem_2.url }}" alt="Imagem 2 do {{ pet.nome }}">
+            <img src="{{ pet.imagem_3.url }}" alt="Imagem 3 do {{ pet.nome }}">
+        </div>
+
+        <div class="row">
+            <div class="col col-sm-12 col-md-6 col-lg-6">
+                <!-- Nome -->
+                <i class="fas fa-paw"></i> <strong>Nome:</strong> {{ pet.nome }}
+            </div>
+
+            <div class="col col-sm-12 col-md-6 col-lg-6">
+                <!-- Status -->
+                <i class="fas fa-info-circle"></i> <strong>Status:</strong> {{ pet.tipo }}
+            </div>
+
+           <div class="col col-sm-12 col-md-6 col-lg-6">
+                <!-- Ícone dinâmico para a espécie -->
+             
+                    {% if pet.especie == 'Cachorro' %}
+                        <i class="fas fa-dog"></i> <strong>Espécie:</strong> Cachorro
+                    {% elif pet.especie == 'Gato' %}
+                        <i class="fas fa-cat"></i> <strong>Espécie:</strong> Gato
+                    {% else %}
+                        <i class="fas fa-paw"></i> <strong>Espécie:</strong> {{ pet.especie }}
+                    {% endif %}
+           </div>
+        
+                <!-- Outros detalhes -->
+                   <div class="col col-sm-12 col-md-6 col-lg-6">
+            <i class="fas fa-arrows-alt-v"></i> <strong>Porte:</strong> {{ pet.porte }}
+        
+                   </div>
+        
+                  <div class="col col-sm-12 col-md-6 col-lg-6">
+            <i class="fas fa-palette"></i> <strong>Cor:</strong> {{ pet.cor }}
+        
+                  </div>
+               
+
+                    
+                        <div class="col col-sm-12 col-md-6 col-lg-6">
+                
+            <i class="fas fa-calendar-alt"></i> <strong>Data e Hora:</strong> {{ pet.data_hora }}
+                        </div>        
+        
+                   <div class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-map-marker-alt"></i> 
+                       
+                       <strong>Localização:</strong> {{ pet.localizacao }}</li>
+                   </div>
+        
+                        <div class="col col-sm-12 col-md-12 col-lg-12">
+            <i class="fas fa-file-alt"></i> <strong>Detalhes:</strong> {{ pet.detalhes }}
+                </div>
+        
+        
+        </div>
+
+    
+        <a href="{% url 'busca' %}" class="button"><i class="fas fa-arrow-left"></i> Voltar</a>
+    </div>
+</body>
+</html>
