@@ -67,6 +67,13 @@
          
          .detalhes {height: 70px;}
       </style>
+<!-- Include do Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Include do Control Geocoder do Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 <div class="container form-container">
     <h1>Pets Cadastrados</h1>
@@ -133,6 +140,7 @@
                    
                     </div>
                 </div>
+                
             {% empty %}
                 <p>Nenhum pet encontrado.</p>
             {% endfor %}
@@ -144,39 +152,80 @@
 
 
 <!-- Modal -->
-<div id="petModal" class="modal" style="display: none;   z-index: 1;">
+<div id="petModal" class="modal" style="display: none; z-index: 1;">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-      
         <div id="modalContent">
-            
-             
-         
-            
-            
-            
+            <div id="mapModal" style="width: 100%; height: 400px;"></div> <!-- Contêiner para o mapa -->
         </div>
     </div>
 </div>
+<script>
+// Função para abrir o modal e inicializar o mapa
+function openModal(petId) {
+    fetch(`/detalhes_pet/${petId}/`)
+        .then(response => response.text())
+        .then(data => {
+            // Preenche o conteúdo do modal
+            document.getElementById('modalContent').innerHTML = data;
+            document.getElementById('petModal').style.display = 'block';
+            
+            // Agora, o setTimeout será usado para garantir que o conteúdo foi carregado
+            // Antes de tentar inicializar o mapa
+            setTimeout(initializeMap, 500);  // Espera 500ms para garantir que o modal tenha sido carregado
+        });
+}
+
+// Função para inicializar o mapa dentro do modal
+function initializeMap() {
+    // Aqui garantimos que o mapa será inicializado no container certo: 'mapModal'
+    var mapModal = L.map('mapModal').setView([-23.5505, -46.6333], 12);  // Inicializa com coordenadas padrão
+
+    // Adiciona a camada de tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(mapModal);
+
+    // Cria o marcador inicial
+    var marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(mapModal);
+
+    // Atualiza os campos de latitude e longitude quando o mapa é clicado
+    mapModal.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById("id_latitude").value = e.latlng.lat;
+        document.getElementById("id_longitude").value = e.latlng.lng;
+    });
+
+    // Atualiza os campos de latitude e longitude quando o marcador é arrastado
+    marker.on('dragend', function (e) {
+        document.getElementById("id_latitude").value = e.target.getLatLng().lat;
+        document.getElementById("id_longitude").value = e.target.getLatLng().lng;
+    });
+
+    // Adiciona o controle de geocodificação (pesquisa por endereço)
+    L.Control.geocoder({
+        defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
+        geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap
+    }).on('markgeocode', function(e) {
+        let latlng = e.geocode.center;
+        marker.setLatLng(latlng);
+        mapModal.setView(latlng, 14); // Zoom na localização
+        document.getElementById("id_latitude").value = latlng.lat;
+        document.getElementById("id_longitude").value = latlng.lng;
+    }).addTo(mapModal);
+}
+
+
+// Função para fechar o modal
+function closeModal() {
+    document.getElementById('petModal').style.display = 'none';
+}
+
+</script>
 
 <!-- Estilo do Modal -->
  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 
-<!-- Script para Abrir e Fechar o Modal -->
-<script>
-    function openModal(petId) {
-        fetch(`/detalhes_pet/${petId}/`)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('modalContent').innerHTML = data;
-                document.getElementById('petModal').style.display = 'block';
-            });
-    }
-
-    function closeModal() {
-        document.getElementById('petModal').style.display = 'none';
-    }
-</script>
 
 <br><br><br><br><br><br><br><br><br>
 

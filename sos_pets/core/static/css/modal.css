@@ -16,7 +16,13 @@
         padding: 20px;
         border: 1px solid #888;
         width: 80%;
+        position: relative;
     }
+
+    #mapModal {
+    height: 400px; /* Altura do mapa dentro do modal */
+    width: 100%; /* Largura do mapa */
+}
 
     .close {
         color: #aaa;

@@ -53,8 +53,6 @@ urlpatterns = [
 
     path('lista_pets/', views.lista_pets, name='lista_pets'),
 
-    path('detalhes_pet/<int:pet_id>/', views.detalhes_pet, name='detalhes_pet'),
-
     path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
     path('admin/', admin.site.urls)
