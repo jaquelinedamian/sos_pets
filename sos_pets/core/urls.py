@@ -1,11 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.shortcuts import render, redirect
 from .forms import UsuarioForm
-import core.views as views
 from . import views
-from .forms import PetForm
 from django.conf.urls.static import static
 from django.conf import settings
+from django.contrib import admin
 
 def cadastro_usuario(request):
     if request.method == 'POST':
@@ -30,18 +30,19 @@ def sucesso(request):
 urlpatterns = [
     path('', views.home, name='home'),
     path('cadastro/', views.cadastro, name='cadastro'),
-    path('cadastro-pets/', views.cadastro_pets, name='cadastro_pets'),
+    path('cadastro-pets/', login_required(views.cadastro_pets), name='cadastro_pets'),
     # Defina as demais rotas
     path('busca/', views.busca, name='busca'), 
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('anuncios/', views.anuncios, name='anuncios'), 
     path('vitrine-detalhes/', views.vitrine_detalhes, name='vitrine_detalhes'), 
-    path('conta/', views.conta, name='conta'), 
+    path('conta/', login_required(views.conta), name='conta'),
     path('faq/', views.faq, name='faq'),
-    path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios'),
+    path('meus-anuncios/', login_required(views.meus_anuncios), name='meus_anuncios'),
     path('sucesso/', views.sucesso, name='sucesso'),
 
-    path('detalhes_usuario/', views.detalhes_usuario, name='detalhes_usuario'),
+    path('detalhes_usuario/', login_required(views.detalhes_usuario), name='detalhes_usuario'),
 
 
     path('lista_usuarios/', views.listar_usuarios, name='lista_usuarios'),
@@ -56,6 +57,7 @@ urlpatterns = [
 
     path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
+    path('admin/', admin.site.urls)
 ]
 
 

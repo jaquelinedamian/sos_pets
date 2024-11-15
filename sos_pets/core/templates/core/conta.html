@@ -11,8 +11,13 @@
                         <img src="https://via.placeholder.com/120" alt="Imagem de Perfil" class="rounded-circle border border-secondary" style="width: 120px; height: 120px;">
                     </div>
                     <div class="info-section">
-                        <h5 class="font-weight-bold">João da Silva</h5>
-                        <p class="text-muted">joao.silva@example.com</p>
+                        {% if user.is_authenticated %}
+                        <h5 class="font-weight-bold">{{ user.username }}</h5>
+                        <h2>Bem-vindo, {{ user.username }}!</h2>
+                        {% else %}
+                        <h2>Por favor, faça o login</h2>
+                        <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
                     </div>
                 </div>
                 </div>
@@ -80,7 +85,7 @@
                      </a>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <a href="#" class="text-danger d-flex align-items-center">
+                     <a href="{% url 'logout' %}" class="text-danger d-flex align-items-center">
 
                         Sair da Conta
                      </a>

@@ -21,6 +21,4 @@ from django.urls import path, include  # Certifique-se de que o 'include' está 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-
-
 ]
