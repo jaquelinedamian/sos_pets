@@ -1,12 +1,79 @@
-{% include 'core/header.html' %}
+
 {% load static %} <!-- Carregar as tags estáticas -->
+ <style>
+         .carousel {
+         width: 100%;
+         max-width: 100%;
+         margin: 0 auto 20px;
+         }
+         .carousel-item img {
+         width: 100%;
+         height: 190px;
+         object-fit: cover;
+         border-radius: 8px;
+         }
+         ul {
+         list-style: none;
+         padding: 0;
+         font-size: 1.1em;
+         }
+         ul li {
+         margin-bottom: 10px;
+         display: flex;
+         align-items: center;
+         }
+         ul li i {
+         margin-right: 10px;
+         color: #00C3DD;
+         }
+         h1 {
+         font-size: 2em;
+         color: #333;
+         margin-bottom: 10px;
+         text-align: left;
+         }
+         .button {
+         display: block;
+         background-color: #00C3DD;
+         color: white;
+         padding: 10px 20px;
+         text-decoration: none;
+         border-radius: 5px;
+         font-size: 1em;
+         text-align: center;
+         margin: 20px auto;
+         width: fit-content;
+         }
+         .button:hover {
+         background-color: #00A9B8;
+         }
+
+         .encontrado {
+         font-size: medium;
+         color: #000;
+         border: 1px solid #00dd88;
+         padding: 10px;
+         background: #91fdd4;
+         }
+         .perdido {
+         font-size: medium;
+         color: #000;
+         border: 1px solid #fbc8b7;
+         padding: 10px;
+         background: #f7aa90;
+         }
+         
+         .card {height: 500px;}
+         
+         .detalhes {height: 70px;}
+      </style>
 
 <div class="container form-container">
     <h1>Pets Cadastrados</h1>
     <div class="pets-container">
         <div class="row">
             {% for pet in pets %}
-                <div class="col col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
                     <div class="card px-4 p-3">
                         <!-- Carrossel Bootstrap para as imagens do pet -->
                         <div id="carousel-{{ pet.id }}" class="carousel slide" data-bs-ride="carousel">
@@ -14,10 +81,9 @@
                                 <div class="carousel-item active">
                                     <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
                                 </div>
-
                             
                                 {% if pet.imagem_1 %}
-                                    <div class="carousel-item">
+                                    <div class="carousel-item">git checkout main 
                                         <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
                                     </div>
                                 {% endif %}
@@ -48,17 +114,19 @@
                         
                         <div class="d-flex">
                             {% if pet.tipo == 'encontrado' %}
-                                <span class="btn btn-success px-3">{{ pet.tipo|title }}</span>
+                                <span class="btn  px-3 encontrado ">{{ pet.tipo|title }}</span>
                             {% elif pet.tipo == 'perdido' %}
-                                <span class="btn btn-danger px-3">{{ pet.tipo|title }}</span>
+                                <span class="btn perdido px-3">{{ pet.tipo|title }}</span>
                             {% else %}
-                                <span class="btn btn-secondary px-3">{{ pet.tipo|title }}</span>
+                                <span class="btn btn-secondary px-3 perdido">{{ pet.tipo|title }}</span>
                             {% endif %}
                         </div>
 
                         <br>
-                        <p>Detalhes: {{ pet.detalhes }}</p>
-                        <p>Localização: {{ pet.localizacao }}</p>
+                       
+                        <p class="detalhes">{{ pet.detalhes|slice:":50" }}{% if pet.detalhes|length > 100 %}...{% endif %}</p>
+
+                        <p>Localização: <br>{{ pet.localizacao }}</p>
                         <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
 
                    
@@ -76,7 +144,7 @@
 
 
 <!-- Modal -->
-<div id="petModal" class="modal" style="display: none;">
+<div id="petModal" class="modal" style="display: none;   z-index: 1;">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
       
@@ -110,6 +178,6 @@
     }
 </script>
 
+<br><br><br><br><br><br><br><br><br>
 
 
-{% include 'core/footer.html' %}

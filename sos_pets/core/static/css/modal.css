@@ -1,7 +1,7 @@
  .modal {
         display: none; /* Escondido por padrão */
         position: fixed;
-        z-index: 1;
+        z-index: 1!important;
         left: 0;
         top: 0;
         width: 100%;
@@ -31,3 +31,71 @@
         text-decoration: none;
         cursor: pointer;
     }
+
+
+         #map {
+         width: 100%;
+         height: 400px;
+         margin-top: 20px;
+         }
+         .carousel {
+         width: 100%;
+         max-width: 400px;
+         margin: 0 auto 20px;
+         }
+         .carousel-item img {
+         width: 100%;
+         height: 400px;
+         object-fit: cover;
+         border-radius: 8px;
+         }
+         ul {
+         list-style: none;
+         padding: 0;
+         font-size: 1.1em;
+         }
+         ul li {
+         margin-bottom: 10px;
+         display: flex;
+         align-items: center;
+         }
+         ul li i {
+         margin-right: 10px;
+         color: #00C3DD;
+         }
+         h1 {
+         font-size: 2em;
+         color: #333;
+         margin-bottom: 10px;
+         text-align: left;
+         }
+         .button {
+         display: block;
+         background-color: #00C3DD;
+         color: white;
+         padding: 10px 20px;
+         text-decoration: none;
+         border-radius: 5px;
+         font-size: 1em;
+         text-align: center;
+         margin: 20px auto;
+         width: fit-content;
+         }
+         .button:hover {
+         background-color: #00A9B8;
+         }
+
+         .encontrado {
+         font-size: medium;
+         color: #000;
+         border: 1px solid #00dd88;
+         padding: 10px;
+         background: #91fdd4;
+         }
+         .perdido {
+         font-size: medium;
+         color: #000;
+         border: 1px solid #fbc8b7;
+         padding: 10px;
+         background: #f7aa90;
+         }
