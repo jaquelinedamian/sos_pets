@@ -71,12 +71,13 @@ def cadastro(request):
         email = request.POST['email']
         telefone = request.POST['telefone']
         rede_social = request.POST.get('rede_social', '')
+        image = request.FILES['foto']
 
         # Cria o usuário usando o email como username
-        User.objects.create_user(username=email, email=email, password=senha)
+        user = User.objects.create_user(username=email, email=email, password=senha)
 
         # Cria o perfil do usuário
-        Usuario.objects.create(nome=nome, email=email, telefone=telefone, rede_social=rede_social)
+        Usuario.objects.create(nome=nome, email=email, telefone=telefone, rede_social=rede_social, image=image, usuario=user)
 
         messages.success(request, "Cadastro realizado com sucesso!")
         return redirect('home')

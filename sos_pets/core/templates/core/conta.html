@@ -8,12 +8,11 @@
                 <div class="container">
                 <div class="row ">
                     <div class="col-md-3 ">
-                        <img src="https://via.placeholder.com/120" alt="Imagem de Perfil" class="rounded-circle border border-secondary" style="width: 120px; height: 120px;">
+                        <img src="{{ user.perfil.image.url }}" alt="Imagem de Perfil" class="rounded-circle border border-secondary" style="width: 120px; height: 120px;">
                     </div>
                     <div class="info-section">
                         {% if user.is_authenticated %}
-                        <h5 class="font-weight-bold">{{ user.username }}</h5>
-                        <h2>Bem-vindo, {{ user.username }}!</h2>
+                        <h2>Bem-vindo, {{ user.perfil.nome }}!</h2>
                         {% else %}
                         <h2>Por favor, faça o login</h2>
                         <a href="{% url 'login' %}">Login</a>
