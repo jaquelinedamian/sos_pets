@@ -3,12 +3,15 @@
 <div class="form-container login">
    <div class="container">
       <div class="row">
+          <div class="col-md-3 ">
+            <img src="{{ user.perfil.image.url }}" alt="Imagem de Perfil" class="rounded-circle border border-secondary" style="width: 120px; height: 120px;">
+          </div>
          <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
             <h3>Informações Cadastradas</h3>
-            <p><strong>Nome:</strong> João Silva{{ nome }}</p>
-            <p><strong>Email:</strong> joao.silva@example.com {{ email }}</p>
-            <p><strong>Telefone:</strong> +55 11 1234-1234 {{ telefone }}</p>
-            <p><strong>Rede Social:</strong> @joaosilva32 {{ rede_social }}</p>
+            <p><strong>Nome:</strong> {{ user.perfil.nome }}</p>
+            <p><strong>Email:</strong> {{ user.perfil.email }}</p>
+            <p><strong>Telefone:</strong> {{ user.perfil.telefone }}</p>
+            <p><strong>Rede Social:</strong> {{ user.perfil.rede_social }}</p>
          </div>
          <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
             <h5 class="font-weight-bold text-secondary mt-4">Opções </h5>
@@ -44,7 +47,7 @@
                   </a>
                </li>
                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a href="#" class="text-danger d-flex align-items-center">
+                  <a href="{% url 'logout' %}" class="text-danger d-flex align-items-center">
                   Sair da Conta
                   </a>
                </li>

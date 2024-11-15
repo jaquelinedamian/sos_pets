@@ -14,30 +14,21 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-    
-    
-    
-    
-    
-    
     <style>
         #map {
             width: 100%;
             height: 400px;
-    
         }
     </style>
 </head>
 
 <div class="container">
    <div class="form-container">
-    
       <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="container">
             <div class="row">
                <div class="col-sm-6">
-                   
                  <img src="{% static 'img/cadastre-pet.png' %}" alt="Logo sos pets"  width="70%">
                </div>
                <div class="col-sm-6">
@@ -134,6 +125,21 @@
 </div>
 
 <script>
+    // Função para truncar um número para N casas decimais
+    function truncarNumero(num, casasDecimais) {
+        let multiplicador = Math.pow(10, casasDecimais);
+        return Math.floor(num * multiplicador) / multiplicador;
+    }
+
+    // Função que atualiza os campos hidden de latitude e longitude
+    function onMapClick(e) {
+        marker.setLatLng(e.latlng);
+        let lat = truncarNumero(e.latlng.lat, 6);  // Truncando latitude para 6 casas decimais
+        let lon = truncarNumero(e.latlng.lng, 6);  // Truncando longitude para 6 casas decimais
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lon;
+    }
+    
     // Inicializa o mapa com a localização padrão
     let map = L.map('map').setView([-23.5505, -46.6333], 12);
 
@@ -145,17 +151,13 @@
     // Cria o marcador inicial, que será movido ou atualizado pela pesquisa
     let marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
 
-    // Função que atualiza os campos hidden de latitude e longitude
-    function onMapClick(e) {
-        marker.setLatLng(e.latlng);
-        document.getElementById("id_latitude").value = e.latlng.lat;
-        document.getElementById("id_longitude").value = e.latlng.lng;
-    }
     map.on('click', onMapClick);
 
     marker.on('dragend', function (e) {
-        document.getElementById("id_latitude").value = e.target.getLatLng().lat;
-        document.getElementById("id_longitude").value = e.target.getLatLng().lng;
+        let lat = truncarNumero(e.target.getLatLng().lat, 6);  // Truncando latitude para 6 casas decimais
+        let lon = truncarNumero(e.target.getLatLng().lng, 6);  // Truncando longitude para 6 casas decimais
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lon;
     });
 
     // Adiciona o controle de geocodificação (pesquisa por endereço)
@@ -167,14 +169,27 @@
         let latlng = e.geocode.center;
         marker.setLatLng(latlng);
         map.setView(latlng, 14); // Zoma na localização
-        document.getElementById("id_latitude").value = latlng.lat;
-        document.getElementById("id_longitude").value = latlng.lng;
+        let lat = truncarNumero(latlng.lat, 6);  // Truncando latitude para 6 casas decimais
+        let lon = truncarNumero(latlng.lng, 6);  // Truncando longitude para 6 casas decimais
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lon;
     }).addTo(map);
-    
-    
-    
-    
-    
+
+    // Adiciona a função de truncamento ao evento de envio do formulário
+    document.querySelector('form').onsubmit = function() {
+        let lat = parseFloat(document.getElementById("id_latitude").value);
+        let lon = parseFloat(document.getElementById("id_longitude").value);
+        
+        if (isNaN(lat) || isNaN(lon)) {
+            alert("Coordenadas inválidas. Por favor, selecione uma posição no mapa.");
+            return false;  // Impede o envio do formulário
+        }
+
+        // Truncar as coordenadas para 6 casas decimais
+        document.getElementById("id_latitude").value = truncarNumero(lat, 6);
+        document.getElementById("id_longitude").value = truncarNumero(lon, 6);
+        return true;  // Permite o envio do formulário
+    };
 </script>
 
 {% include 'core/footer.html' %}
