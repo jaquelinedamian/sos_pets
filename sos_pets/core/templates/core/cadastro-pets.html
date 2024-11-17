@@ -125,17 +125,11 @@
 </div>
 
 <script>
-    // Função para truncar um número para N casas decimais
-    function truncarNumero(num, casasDecimais) {
-        let multiplicador = Math.pow(10, casasDecimais);
-        return Math.floor(num * multiplicador) / multiplicador;
-    }
-
     // Função que atualiza os campos hidden de latitude e longitude
     function onMapClick(e) {
         marker.setLatLng(e.latlng);
-        let lat = truncarNumero(e.latlng.lat, 6);  // Truncando latitude para 6 casas decimais
-        let lon = truncarNumero(e.latlng.lng, 6);  // Truncando longitude para 6 casas decimais
+        let lat = e.latlng.lat.toFixed(6);  // Truncando latitude para 6 casas decimais
+        let lon = e.latlng.lng.toFixed(6);  // Truncando longitude para 6 casas decimais
         document.getElementById("id_latitude").value = lat;
         document.getElementById("id_longitude").value = lon;
     }
@@ -154,8 +148,8 @@
     map.on('click', onMapClick);
 
     marker.on('dragend', function (e) {
-        let lat = truncarNumero(e.target.getLatLng().lat, 6);  // Truncando latitude para 6 casas decimais
-        let lon = truncarNumero(e.target.getLatLng().lng, 6);  // Truncando longitude para 6 casas decimais
+        let lat = e.target.getLatLng().lat.toFixed(6);  // Truncando latitude para 6 casas decimais
+        let lon = e.target.getLatLng().lng.toFixed(6);  // Truncando longitude para 6 casas decimais
         document.getElementById("id_latitude").value = lat;
         document.getElementById("id_longitude").value = lon;
     });
@@ -169,8 +163,8 @@
         let latlng = e.geocode.center;
         marker.setLatLng(latlng);
         map.setView(latlng, 14); // Zoma na localização
-        let lat = truncarNumero(latlng.lat, 6);  // Truncando latitude para 6 casas decimais
-        let lon = truncarNumero(latlng.lng, 6);  // Truncando longitude para 6 casas decimais
+        let lat = latlng.lat.toFixed(6);  // Truncando latitude para 6 casas decimais
+        let lon = latlng.lng.toFixed(6);  // Truncando longitude para 6 casas decimais
         document.getElementById("id_latitude").value = lat;
         document.getElementById("id_longitude").value = lon;
     }).addTo(map);
@@ -186,8 +180,8 @@
         }
 
         // Truncar as coordenadas para 6 casas decimais
-        document.getElementById("id_latitude").value = truncarNumero(lat, 6);
-        document.getElementById("id_longitude").value = truncarNumero(lon, 6);
+        document.getElementById("id_latitude").value = lat.toFixed(6);
+        document.getElementById("id_longitude").value = lon.toFixed(6);
         return true;  // Permite o envio do formulário
     };
 </script>
