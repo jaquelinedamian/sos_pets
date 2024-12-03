@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecionar Localização</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Estilo do mapa */
+        #map {
+            height: 500px; /* Altura do mapa */
+            margin-bottom: 20px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecionar Localização no Mapa</h1>
+    <div id="map"></div>
+    <p><strong>Endereço:</strong> <span id="address">Clique no mapa para selecionar</span></p>
+    <p><strong>Latitude:</strong> <span id="latitude"></span></p>
+    <p><strong>Longitude:</strong> <span id="longitude"></span></p>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // API Key do LocationIQ (substitua pela sua)
+        const apiToken = "pk.227bb16be8af10a97550047d4932e148";
+
+        // Inicializar o mapa centrado em São Paulo
+        const map = L.map('map').setView([-23.55052, -46.633308], 13);
+
+        // Adiciona o mapa base do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Adicionar marcador para selecionar a localização
+        let marker = L.marker([-23.55052, -46.633308], { draggable: true }).addTo(map);
+
+        // Função para atualizar as coordenadas e o endereço
+        function updateLocation(lat, lng) {
+            // Exibir latitude e longitude na página
+            document.getElementById('latitude').innerText = lat.toFixed(6);
+            document.getElementById('longitude').innerText = lng.toFixed(6);
+
+            // Buscar endereço usando a API de Reverse Geocoding do LocationIQ
+            fetch(`https://eu1.locationiq.com/v1/reverse.php?key=${apiToken}&lat=${lat}&lon=${lng}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    // Exibir o endereço na página
+                    const address = data.display_name || 'Endereço não encontrado';
+                    document.getElementById('address').innerText = address;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar o endereço:', error);
+                    document.getElementById('address').innerText = 'Erro ao buscar endereço';
+                });
+        }
+
+        // Atualizar localização ao clicar no mapa
+        map.on('click', function (e) {
+            const { lat, lng } = e.latlng;
+            marker.setLatLng([lat, lng]); // Move o marcador para o local clicado
+            updateLocation(lat, lng);
+        });
+
+        // Atualizar localização ao arrastar o marcador
+        marker.on('dragend', function (e) {
+            const { lat, lng } = e.target.getLatLng();
+            updateLocation(lat, lng);
+        });
+
+        // Atualizar a localização inicial
+        updateLocation(-23.55052, -46.633308);
+    </script>
+</body>
+</html>

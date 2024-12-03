@@ -12,7 +12,7 @@ class PetForm(forms.ModelForm):
         model = Pet
         fields = [
             'tipo', 'nome', 'especie', 'porte', 'cor', 'detalhes',
-            'data_hora', 'localizacao', 'latitude', 'longitude',
+            'data_hora', 'localizacao', 'address', 'latitude', 'longitude',
             'telefone_contato', 'email_contato', 'imagem1', 'imagem2', 'imagem3'
         ]
         widgets = {

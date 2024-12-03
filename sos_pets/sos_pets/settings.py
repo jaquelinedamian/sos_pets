@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
+
+
 load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
 
@@ -106,8 +109,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sos_pets',
-        'USER': 'postgres',
-        'PASSWORD': 'teste50',
+        'USER': 'admin',
+        'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',
  #        'OPTIONS':  
@@ -134,6 +137,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Internationalization

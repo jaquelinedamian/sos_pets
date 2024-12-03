@@ -11,13 +11,7 @@ class Usuario(models.Model):
     telefone = models.CharField('Telefone', max_length=20, blank=True)
     rede_social = models.CharField('Rede social principal', max_length=100, blank=True)
     image = models.ImageField(upload_to='user_images/', blank=True)
-    senha = models.CharField('Senha', max_length=100)
-
-    def save(self, *args, **kwargs):
-        # Hash a senha antes de salvar
-        if self.senha:
-            self.senha = make_password(self.senha)
-        super().save(*args, **kwargs)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil', null=True)
 
     def __str__(self):
         return f"{self.nome} - {self.email}"
@@ -57,6 +51,8 @@ class Pet(models.Model):
     detalhes = models.TextField('Detalhes', blank=True)
     data_hora = models.DateTimeField('Data e Hora')  # Permite ao usuário definir data e hora
     localizacao = models.CharField('Descrição do Local', max_length=100, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)  # Novo campo
+
     latitude = models.DecimalField('Latitude', max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField('Longitude', max_digits=9, decimal_places=6, blank=True, null=True)
     telefone_contato = models.CharField('Telefone do Tutor', max_length=15, blank=True)

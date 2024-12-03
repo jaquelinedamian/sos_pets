@@ -1,135 +1,49 @@
-{% load static %} {% include 'core/header.html' %} <style>
-	.encontrado {
-	  font-size: medium;
-	  color: #000;
-	  border: 1px solid #00dd88;
-	  padding: 10px;
-	  background: #91fdd4;
-	}
-	
-	
-	.perdido {
-	  font-size: medium;
-	  color: #000;
-	  border: 1px solid #fbc8b7;
-	  padding: 10px;
-	  background: #f7aa90;
-	}
-	
-</style>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14704.613028924938!2d-43.36031623523231!3d-22.87079631848472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9962e0ea7680ef%3A0x774cd378e571e0f3!2sOsvaldo%20Cruz%2C%20Rio%20de%20Janeiro%20-%20RJ!5e0!3m2!1spt-BR!2sbr!4v1730074230244!5m2!1spt-BR!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% load static %} {% include 'core/header.html' %} 
+
+  {% include 'core/mapa_pets.html' %} 
+
 <div class="container mt-1 busca">
+    
 	<div class="row mt-3">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 text-center">
 			<div class="btn-group mt-1" role="group" aria-label="Basic radio toggle button group">
-				<span>Busca por tipo:<span>
+				<span>Busca por tipo: <span>
 						<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
 						<label class="btn btn-outline-primary" for="btnradio1">Gatos</label>
 						<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
 						<label class="btn btn-outline-primary" for="btnradio2">Cachorros</label>
+                    </span>
+                </span>
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 text-center">
 			<div class="btn-group mt-1" role="group2" aria-label="Basic radio toggle button group">
-				<span>Busca por distância:<span>
+				<span>Busca por distância: <span>
 						<input type="radio" class="btn-check" name="btnradio1" id="btnradio_3" autocomplete="off" checked>
 						<label class="btn btn-outline-primary" for="btnradio_3">1km </label>
 						<input type="radio" class="btn-check" name="btnradio1" id="btnradio_4" autocomplete="off">
 						<label class="btn btn-outline-primary" for="btnradio_4">10km </label>
 						<input type="radio" class="btn-check" name="btnradio1" id="btnradio_5" autocomplete="off">
 						<label class="btn btn-outline-primary" for="btnradio_5">20km </label>
+                    </span>
+                </span>
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 text-center">
 			<div class="btn-group mt-1" role="group3" aria-label="Basic radio toggle button group">
-				<span>Busca por data:<span>
+				<span>Busca por data: <span>
 						<input type="radio" class="btn-check" name="btnradio2" id="btnradio6" autocomplete="off" checked>
 						<label class="btn btn-outline-primary" for="btnradio6">Mais recente </label>
 						<input type="radio" class="btn-check" name="btnradio2" id="btnradio7" autocomplete="off">
 						<label class="btn btn-outline-primary" for="btnradio7">Mais antiga </label>
+                    </span>
+                </span>
 			</div>
 		</div>
 	</div>
 	<br>
-	<div class="container mt-5">
-		<h1 class="mb-4">Pets encontrados e perdidos</h1>
-		<div class="row">
-			<div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
-				<div class="card shadow-sm">
-					<!-- Foto com borda arredondada -->
-					<img class="img-fluid rounded" src="{% static 'img/dog.png' %}" alt="Logo sos pets">
-					<div class="card-body">
-						<!-- Container 1: Tipo e ID do Anúncio -->
-						<p class="encontrado rounded">Cachorro encontrado <span class="h6">ID: 1234</span></p>
-						<!-- Container 2: Nome do Pet -->
-						<div class="row mb-2">
-							<div class="col-12">
-								<h2 class="h2">JUJU</h2>
-							</div>
-						</div>
-						<!-- Container 3: Data e Horário -->
-						<div class="row mb-2">
-							<div class="col-6">
-								<h3 class="h6">Data:</h3>
-								<p class="small">18/10/2024</p>
-							</div>
-							<div class="col-6">
-								<h3 class="h6">Horário:</h3>
-								<p class="small">14:30</p>
-							</div>
-						</div>
-						<!-- Container 4: Localização -->
-						<div class="row mb-3">
-							<div class="col-12">
-								<h3 class="h6">Localização:</h3>
-								<p class="small text-muted">Bairro Oswaldo Cruz</p>
-							</div>
-						</div>
-						<!-- Container 5: Botão de Anúncio Completo -->
-						<div class="text-center">
-							<a href="{% url 'vitrine_detalhes' %} " class="btn btn-primary btn-block">Ver anúncio completo</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
-				<div class="card shadow-sm">
-					<!-- Foto com borda arredondada -->
-					<img class="img-fluid rounded" src="{% static 'img/dog.png' %}" alt="Logo sos pets">
-					<div class="card-body">
-						<!-- Container 1: Tipo e ID do Anúncio -->
-						<p class="perdido rounded">Cachorro encontrado <span class="h6">ID: 1234</span></p>
-						<!-- Container 2: Nome do Pet -->
-						<div class="row mb-2">
-							<div class="col-12">
-								<h2 class="h2">JUJU</h2>
-							</div>
-						</div>
-						<!-- Container 3: Data e Horário -->
-						<div class="row mb-2">
-							<div class="col-6">
-								<h3 class="h6">Data:</h3>
-								<p class="small">18/10/2024</p>
-							</div>
-							<div class="col-6">
-								<h3 class="h6">Horário:</h3>
-								<p class="small">14:30</p>
-							</div>
-						</div>
-						<!-- Container 4: Localização -->
-						<div class="row mb-3">
-							<div class="col-12">
-								<h3 class="h6">Localização:</h3>
-								<p class="small text-muted">Bairro Oswaldo Cruz</p>
-							</div>
-						</div>
-						<!-- Container 5: Botão de Anúncio Completo -->
-						<div class="text-center">
-							<a href="{% url 'vitrine_detalhes' %} " class="btn btn-primary btn-block">Ver Anúncio Completo</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-    </div>   
+    
+{% include 'core/lista_pets.html' %} 
+  
+    
 	</div> {% include 'core/footer.html' %}

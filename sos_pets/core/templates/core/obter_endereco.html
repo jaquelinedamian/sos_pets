@@ -1,0 +1,31 @@
+<script>
+    
+    function updateLocationInfo(latlng) {
+    document.getElementById("id_latitude").value = latlng.lat.toFixed(6);
+    document.getElementById("id_longitude").value = latlng.lng.toFixed(6);
+
+    fetch('/obter-endereco/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            latitude: latlng.lat,
+            longitude: latlng.lng
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.endereco) {
+            document.getElementById("localizacao").value = data.endereco; // Atualiza o campo de localização
+        } else {
+            console.error("Erro ao obter endereço:", data.error || "Erro desconhecido");
+        }
+    })
+    .catch(error => console.error("Erro na requisição:", error));
+}
+
+    
+    
+</script>
