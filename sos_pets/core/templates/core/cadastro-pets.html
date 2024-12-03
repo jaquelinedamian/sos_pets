@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa com Pesquisa por Endereço</title>
 
-    <!-- Incluir o Leaflet -->
+     <!-- Incluir o Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -14,21 +14,28 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    
+    
     <style>
         #map {
             width: 100%;
             height: 400px;
+    
         }
     </style>
 </head>
 
 <div class="container">
    <div class="form-container">
+    
       <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="container">
             <div class="row">
                <div class="col-sm-6">
+                   
                  <img src="{% static 'img/cadastre-pet.png' %}" alt="Logo sos pets"  width="70%">
                </div>
                <div class="col-sm-6">
@@ -72,23 +79,17 @@
                      <label for="detalhes">Detalhes:</label>
                      <textarea id="detalhes" name="detalhes" class="form-control" placeholder="Detalhes adicionais sobre o pet" required></textarea>
                   </div>
-                  <div class="form-group">
-                     <label for="data_hora">Data e Hora:</label>
-                     <input type="datetime-local" id="data_hora" name="data_hora" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                     <label for="localizacao">Localização:</label>
-                     <input type="text" id="localizacao" name="localizacao" class="form-control" placeholder="Local onde o pet foi visto" required>
-                  </div>
+
                   <!-- Contato do Tutor -->
                   <div class="form-group">
-                     <label for="email_contato">Email de Contato:</label>
+                     <label for="email_contato">Email do tutor:</label>
                      <input type="email" id="email_contato" name="email_contato" class="form-control" placeholder="Email do tutor" required>
                   </div>
                   <div class="form-group">
-                     <label for="telefone_contato">Telefone de Contato:</label>
+                     <label for="telefone_contato">Telefone do tutor:</label>
                      <input type="tel" id="telefone_contato" name="telefone_contato" class="form-control" placeholder="Telefone do tutor" required>
                   </div>
+               <br>
                   <!-- Imagens do Pet -->
                   <h5>Imagens do Pet</h5>
                   <div class="form-group">
@@ -104,8 +105,26 @@
                      <input type="file" id="imagem3" name="imagem3" class="form-control" accept="image/*">
                   </div>
                   <!-- Campos de Latitude e Longitude -->
-                  <input type="hidden" id="id_latitude" name="latitude">
-                  <input type="hidden" id="id_longitude" name="longitude">
+  <br>
+             
+                                 <div class="form-group">
+                     <label for="data_hora">Data e Hora que foi perdido /  encontrado</label>
+                     <input type="datetime-local" id="data_hora" name="data_hora" class="form-control" required>
+                  </div>
+
+               
+  <div class="form-group">
+    <label for="address">Região onde foi perdido /  encontrado:</label>
+    <input type="text" id="address" name="address" class="form-control" placeholder="Clique no mapa ou edite o endereço" required>
+</div>
+ <div class="form-group" style="display: none;">
+    <label for="latitude"><strong>Latitude:</strong></label>
+    <input type="text" id="latitude" name="latitude" class="form-control" readonly>
+</div>
+<div class="form-group" style="display: none;">
+    <label for="longitude"><strong>Longitude:</strong></label>
+    <input type="text" id="longitude" name="longitude" class="form-control" readonly>
+</div>
                   <br>
                   <div id="map"></div>
                <br>
@@ -125,65 +144,130 @@
 </div>
 
 <script>
-    // Função que atualiza os campos hidden de latitude e longitude
-    function onMapClick(e) {
-        marker.setLatLng(e.latlng);
-        let lat = e.latlng.lat.toFixed(6);  // Truncando latitude para 6 casas decimais
-        let lon = e.latlng.lng.toFixed(6);  // Truncando longitude para 6 casas decimais
-        document.getElementById("id_latitude").value = lat;
-        document.getElementById("id_longitude").value = lon;
-    }
-    
-    // Inicializa o mapa com a localização padrão
-    let map = L.map('map').setView([-23.5505, -46.6333], 12);
+    // API Key do LocationIQ (substitua pela sua)
+    const apiToken = "pk.227bb16be8af10a97550047d4932e148";
 
-    // Adiciona a camada de tiles do OpenStreetMap
+    // Inicializar o mapa centrado em São Paulo
+    const map = L.map('map').setView([-23.628018630115747, -46.56819156666596], 16);
+
+    // Adiciona o mapa base do OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
     }).addTo(map);
 
-    // Cria o marcador inicial, que será movido ou atualizado pela pesquisa
-    let marker = L.marker([-23.5505, -46.6333], {draggable: true}).addTo(map);
+    // Adicionar marcador para selecionar a localização
+    let marker = L.marker([-23.628018630115747, -46.56819156666596], { draggable: true }).addTo(map);
 
-    map.on('click', onMapClick);
+    // Função para atualizar as coordenadas e o endereço
+    function updateLocation(lat, lng) {
+        // Atualizar os valores dos inputs de latitude e longitude
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+        latitudeInput.value = lat.toFixed(6);
+        longitudeInput.value = lng.toFixed(6);
 
-    marker.on('dragend', function (e) {
-        let lat = e.target.getLatLng().lat.toFixed(6);  // Truncando latitude para 6 casas decimais
-        let lon = e.target.getLatLng().lng.toFixed(6);  // Truncando longitude para 6 casas decimais
-        document.getElementById("id_latitude").value = lat;
-        document.getElementById("id_longitude").value = lon;
+        // Buscar endereço usando a API de Reverse Geocoding do LocationIQ
+        fetch(`https://eu1.locationiq.com/v1/reverse.php?key=${apiToken}&lat=${lat}&lon=${lng}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                // Formatar o endereço para exibir apenas rua, número, bairro, cidade e estado
+                const addressDetails = data.address;
+                const formattedAddress = [
+                    addressDetails.road || '',            // Nome da rua
+                    addressDetails.house_number || '',    // Número da casa
+                    addressDetails.neighbourhood || '',   // Bairro
+                    addressDetails.city || addressDetails.town || addressDetails.village || '', // Cidade
+                    addressDetails.state || ''            // Estado
+                ].filter(Boolean).join(', '); // Remove campos vazios e junta com vírgulas
+
+                // Exibir o endereço formatado no campo editável
+                document.getElementById('address').value = formattedAddress;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar o endereço:', error);
+                document.getElementById('address').value = 'Erro ao buscar endereço';
+            });
+    }
+
+    // Atualizar localização ao clicar no mapa
+    map.on('click', function (e) {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]); // Move o marcador para o local clicado
+        updateLocation(lat, lng);
     });
 
-    // Adiciona o controle de geocodificação (pesquisa por endereço)
-    L.Control.geocoder({
-        defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
-        geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap para geocodificação
-    }).on('markgeocode', function(e) {
-        // Ao buscar o endereço, move o marcador e atualiza as coordenadas
-        let latlng = e.geocode.center;
-        marker.setLatLng(latlng);
-        map.setView(latlng, 14); // Zoma na localização
-        let lat = latlng.lat.toFixed(6);  // Truncando latitude para 6 casas decimais
-        let lon = latlng.lng.toFixed(6);  // Truncando longitude para 6 casas decimais
-        document.getElementById("id_latitude").value = lat;
-        document.getElementById("id_longitude").value = lon;
-    }).addTo(map);
+    // Atualizar localização ao arrastar o marcador
+    marker.on('dragend', function (e) {
+        const { lat, lng } = e.target.getLatLng();
+        updateLocation(lat, lng);
+    });
 
-    // Adiciona a função de truncamento ao evento de envio do formulário
-    document.querySelector('form').onsubmit = function() {
-        let lat = parseFloat(document.getElementById("id_latitude").value);
-        let lon = parseFloat(document.getElementById("id_longitude").value);
-        
-        if (isNaN(lat) || isNaN(lon)) {
-            alert("Coordenadas inválidas. Por favor, selecione uma posição no mapa.");
-            return false;  // Impede o envio do formulário
+    // Atualizar a localização inicial
+    updateLocation(-23.628018630115747, -46.56819156666596);
+
+    // Autocomplete API para o campo de endereço
+    const addressInput = document.getElementById('address');
+    addressInput.addEventListener('input', function () {
+        const query = addressInput.value;
+        if (query.length > 2) { // Começar a pesquisa após digitar 3 caracteres
+            fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${query}&format=json&limit=5`)
+                .then(response => response.json())
+                .then(data => {
+                    const suggestions = data.map(result => {
+                        // Formatar as sugestões de endereço (apenas rua, bairro, cidade e estado)
+                        const addressDetails = result.address;
+                        return [
+                            addressDetails.road || '',
+                            addressDetails.house_number || '',
+                            addressDetails.neighbourhood || '',
+                            addressDetails.city || addressDetails.town || addressDetails.village || '',
+                            addressDetails.state || ''
+                        ].filter(Boolean).join(', '); // Remove campos vazios e junta com vírgulas
+                    });
+
+                    // Exibir as sugestões no datalist
+                    const dataList = document.createElement('datalist');
+                    suggestions.forEach(suggestion => {
+                        const option = document.createElement('option');
+                        option.value = suggestion;
+                        dataList.appendChild(option);
+                    });
+                    addressInput.setAttribute('list', 'suggestions');
+                    addressInput.parentElement.appendChild(dataList);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar sugestões de endereço:', error);
+                });
         }
+    });
 
-        // Truncar as coordenadas para 6 casas decimais
-        document.getElementById("id_latitude").value = lat.toFixed(6);
-        document.getElementById("id_longitude").value = lon.toFixed(6);
-        return true;  // Permite o envio do formulário
-    };
+    // Atualizar o marcador e o mapa quando o usuário selecionar um endereço no autocomplete
+    addressInput.addEventListener('change', function () {
+        const address = addressInput.value;
+
+        // Buscar coordenadas (latitude e longitude) para o endereço digitado
+        fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${address}&format=json&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const { lat, lon } = data[0];
+
+                    // Atualizar o marcador no mapa e a localização
+                    marker.setLatLng([lat, lon]);
+                    map.setView([lat, lon], 16); // Ajustar o zoom do mapa
+
+                    // Atualizar as coordenadas e o endereço
+                    updateLocation(lat, lon);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar coordenadas para o endereço:', error);
+            });
+    });
 </script>
+
+    
+    
+
 
 {% include 'core/footer.html' %}

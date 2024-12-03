@@ -51,6 +51,8 @@ class Pet(models.Model):
     detalhes = models.TextField('Detalhes', blank=True)
     data_hora = models.DateTimeField('Data e Hora')  # Permite ao usuário definir data e hora
     localizacao = models.CharField('Descrição do Local', max_length=100, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)  # Novo campo
+
     latitude = models.DecimalField('Latitude', max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField('Longitude', max_digits=9, decimal_places=6, blank=True, null=True)
     telefone_contato = models.CharField('Telefone do Tutor', max_length=15, blank=True)

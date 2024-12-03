@@ -1,238 +1,146 @@
-
 {% load static %} <!-- Carregar as tags estáticas -->
- <style>
-         .carousel {
-         width: 100%;
-         max-width: 100%;
-         margin: 0 auto 20px;
-         }
-         .carousel-item img {
-         width: 100%;
-         height: 190px;
-         object-fit: cover;
-         border-radius: 8px;
-         }
-         ul {
-         list-style: none;
-         padding: 0;
-         font-size: 1.1em;
-         }
-         ul li {
-         margin-bottom: 10px;
-         display: flex;
-         align-items: center;
-         }
-         ul li i {
-         margin-right: 10px;
-         color: #00C3DD;
-         }
-         h1 {
-         font-size: 2em;
-         color: #333;
-         margin-bottom: 10px;
-         text-align: left;
-         }
-         .button {
-         display: block;
-         background-color: #00C3DD;
-         color: white;
-         padding: 10px 20px;
-         text-decoration: none;
-         border-radius: 5px;
-         font-size: 1em;
-         text-align: center;
-         margin: 20px auto;
-         width: fit-content;
-         }
-         .button:hover {
-         background-color: #00A9B8;
-         }
 
-         .encontrado {
-         font-size: medium;
-         color: #000;
-         border: 1px solid #00dd88;
-         padding: 10px;
-         background: #91fdd4;
-         }
-         .perdido {
-         font-size: medium;
-         color: #000;
-         border: 1px solid #fbc8b7;
-         padding: 10px;
-         background: #f7aa90;
-         }
-         
-         .card {height: 500px;}
-         
-         .detalhes {height: 70px;}
-      </style>
 <!-- Include do Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <!-- Include do Control Geocoder do Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+<style>
+    
+    .card img {
+    width: 100%; /* Ajusta a largura para o contêiner */
+    height: 300px; /* Inicialmente sem altura */
+
+    object-fit: cover; /* Corta as imagens proporcionalmente */
+    object-position: center; /* Centraliza o conteúdo recortado */
+    border-radius: 8px; /* Opcional: deixa as bordas arredondadas */
+}
+    .detalhes {height: 70px;}
+</style>
+
+
+
 <div class="container form-container">
-    <h1>Pets Cadastrados</h1>
-    <div class="pets-container">
-        <div class="row">
-            {% for pet in pets %}
-                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
-                    <div class="card px-4 p-3">
-                        <!-- Carrossel Bootstrap para as imagens do pet -->
-                        <div id="carousel-{{ pet.id }}" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
-                                </div>
-                            
-                                {% if pet.imagem_1 %}
-                                    <div class="carousel-item">git checkout main 
-                                        <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
-                                    </div>
-                                {% endif %}
-                                {% if pet.imagem_2 %}
-                                    <div class="carousel-item">
-                                        <img src="{{ pet.imagem2.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
-                                    </div>
-                                {% endif %}
-                                {% if pet.imagem_3 %}
-                                    <div class="carousel-item">
-                                        <img src="{{ pet.imagem3.url}}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
-                                    </div>
-                                {% endif %}
-                                <!-- Adicione mais ifs se tiver mais imagens -->
-                            </div>
-                            <!-- Controles do carrossel -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ pet.id }}" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Anterior</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ pet.id }}" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Próximo</span>
-                            </button>
-                        </div>
+   <h1>Pets Cadastrados</h1>
+   <div class="pets-container">
+      <div class="row">
+         {% for pet in pets %}
+         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+            <div class="card px-4 p-3" onclick="openModal('{{ pet.id }}')" style="cursor: pointer;">
+               <!-- Carrossel Bootstrap para as imagens do pet -->
+               <div id="carousel-{{ pet.id }}" >
+                 
+                        <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                     </div>
+                     {% if pet.imagem_1 %}
+                     <div>git checkout main 
+                        <img src="{{ pet.imagem1.url }}" class="d-block w-100" alt="Imagem do {{ pet.nome }}">
+                     </div>
+                     {% endif %}
+                     <!-- Adicione mais ifs se tiver mais imagens -->
+              <br>
+               <h3> {{ pet.nome }}</h3>
+               <div class="d-flex">
+                  {% if pet.tipo == 'encontrado' %}
+                  <span class="btn  px-3 encontrado ">{{ pet.tipo|title }} em: {{ pet.data_hora | date:"d/m/Y" }}</span>
+                  {% elif pet.tipo == 'perdido' %}
+                  <span class="btn perdido px-3">{{ pet.tipo|title }} em: {{ pet.data_hora | date:"d/m/Y"}}</span>
+                  {% else %}
+                  <span class="btn btn-secondary px-3 perdido">{{ pet.tipo|title }} em: {{ pet.data_hora | date:"d/m/Y" }}</span>
+                  {% endif %}
+               </div>
+               <br>
+               <p class="detalhes">{{ pet.detalhes|slice:":50" }}{% if pet.detalhes|length > 100 %}...{% endif %}</p>
+              <p><strong>Última localização conhecida</strong> <br>{{ pet.address|slice:":45" }}{% if pet.address|length > 45 %}...{% endif %}</p>
 
-                        <h3> {{ pet.nome }}</h3> 
-                        
-                        <div class="d-flex">
-                            {% if pet.tipo == 'encontrado' %}
-                                <span class="btn  px-3 encontrado ">{{ pet.tipo|title }}</span>
-                            {% elif pet.tipo == 'perdido' %}
-                                <span class="btn perdido px-3">{{ pet.tipo|title }}</span>
-                            {% else %}
-                                <span class="btn btn-secondary px-3 perdido">{{ pet.tipo|title }}</span>
-                            {% endif %}
-                        </div>
-
-                        <br>
-                       
-                        <p class="detalhes">{{ pet.detalhes|slice:":50" }}{% if pet.detalhes|length > 100 %}...{% endif %}</p>
-
-                        <p>Localização: <br>{{ pet.localizacao }}</p>
-                        <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
-
-                   
-                   
-                    </div>
-                </div>
-                
-            {% empty %}
-                <p>Nenhum pet encontrado.</p>
-            {% endfor %}
-        </div>
-    </div>
+               <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
+            </div>
+         </div>
+         {% empty %}
+         <p>Nenhum pet encontrado.</p>
+         {% endfor %}
+      </div>
+   </div>
 </div>
-
-
-
-
 <!-- Modal -->
 <div id="petModal" class="modal" style="display: none; z-index: 1;">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="modalContent">
-            <div id="mapModal" style="width: 100%; height: 400px;"></div> <!-- Contêiner para o mapa -->
-        </div>
-    </div>
+   <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalContent">
+         <div id="mapModal" style="width: 100%; height: 400px;"></div>
+         <!-- Contêiner para o mapa -->
+      </div>
+   </div>
 </div>
 <script>
-function openModal(petId) {
-    fetch(`/detalhes_pet/${petId}/`)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('modalContent').innerHTML = data;
-            document.getElementById('petModal').style.display = 'block';
-            
-            // Espera 500ms para garantir que o modal foi carregado
-            setTimeout(initializeMap, 500);  // Ajuste o tempo de espera aqui se necessário
-        })
-        .catch(error => console.error('Erro ao carregar detalhes do pet:', error));
-}
-
-function initializeMap() {
-    let petLatitude = parseFloat(document.getElementById('pet-latitude').value);
-    let petLongitude = parseFloat(document.getElementById('pet-longitude').value);
-
-    console.log('Latitude:', petLatitude, 'Longitude:', petLongitude);  // Verifique no console se as coordenadas estão corretas
-
-    if (isNaN(petLatitude) || isNaN(petLongitude)) {
-        petLatitude = -23.5505;  // Latitude padrão
-        petLongitude = -46.6333; // Longitude padrão
-    }
-
-    let mapModal = L.map('mapModal').setView([petLatitude, petLongitude], 14);  // Zoom 14 para ver claramente o marcador
-
-    // Adiciona a camada de tiles do OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(mapModal);
-
-    // Cria o marcador inicial nas coordenadas do pet
-    let marker = L.marker([petLatitude, petLongitude], {draggable: true}).addTo(mapModal);
-
-    // Atualiza os campos de latitude e longitude quando o mapa é clicado
-    mapModal.on('click', function (e) {
-        marker.setLatLng(e.latlng);
-        document.getElementById("id_latitude").value = e.latlng.lat;
-        document.getElementById("id_longitude").value = e.latlng.lng;
-    });
-
-    // Atualiza os campos de latitude e longitude quando o marcador é arrastado
-    marker.on('dragend', function (e) {
-        document.getElementById("id_latitude").value = e.target.getLatLng().lat;
-        document.getElementById("id_longitude").value = e.target.getLatLng().lng;
-    });
-
-    // Adiciona o controle de geocodificação (pesquisa por endereço)
-    L.Control.geocoder({
-        defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
-        geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap
-    }).on('markgeocode', function(e) {
-        let latlng = e.geocode.center;
-        marker.setLatLng(latlng);
-        mapModal.setView(latlng, 14); // Zoom na localização
-        document.getElementById("id_latitude").value = latlng.lat;
-        document.getElementById("id_longitude").value = latlng.lng;
-    }).addTo(mapModal);
-}
-
-
-// Função para fechar o modal
-function closeModal() {
-    document.getElementById('petModal').style.display = 'none';
-}
+   function openModal(petId) {
+       fetch(`/detalhes_pet/${petId}/`)
+           .then(response => response.text())
+           .then(data => {
+               document.getElementById('modalContent').innerHTML = data;
+               document.getElementById('petModal').style.display = 'block';
+               
+               // Espera 500ms para garantir que o modal foi carregado
+               setTimeout(initializeMap, 500);  // Ajuste o tempo de espera aqui se necessário
+           })
+           .catch(error => console.error('Erro ao carregar detalhes do pet:', error));
+   }
+   
+   function initializeMap() {
+       let petLatitude = parseFloat(document.getElementById('pet-latitude').value);
+       let petLongitude = parseFloat(document.getElementById('pet-longitude').value);
+   
+       console.log('Latitude:', petLatitude, 'Longitude:', petLongitude);  // Verifique no console se as coordenadas estão corretas
+   
+       if (isNaN(petLatitude) || isNaN(petLongitude)) {
+           petLatitude = -23.5505;  // Latitude padrão
+           petLongitude = -46.6333; // Longitude padrão
+       }
+   
+       let mapModal = L.map('mapModal').setView([petLatitude, petLongitude], 14);  // Zoom 14 para ver claramente o marcador
+   
+       // Adiciona a camada de tiles do OpenStreetMap
+       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+           maxZoom: 19,
+       }).addTo(mapModal);
+   
+       // Cria o marcador inicial nas coordenadas do pet
+       let marker = L.marker([petLatitude, petLongitude], {draggable: true}).addTo(mapModal);
+   
+       // Atualiza os campos de latitude e longitude quando o mapa é clicado
+       mapModal.on('click', function (e) {
+           marker.setLatLng(e.latlng);
+           document.getElementById("id_latitude").value = e.latlng.lat;
+           document.getElementById("id_longitude").value = e.latlng.lng;
+       });
+   
+       // Atualiza os campos de latitude e longitude quando o marcador é arrastado
+       marker.on('dragend', function (e) {
+           document.getElementById("id_latitude").value = e.target.getLatLng().lat;
+           document.getElementById("id_longitude").value = e.target.getLatLng().lng;
+       });
+   
+       // Adiciona o controle de geocodificação (pesquisa por endereço)
+       L.Control.geocoder({
+           defaultMarkGeocode: false, // Evita que o marcador apareça automaticamente
+           geocoder: new L.Control.Geocoder.Nominatim() // Usando o Nominatim do OpenStreetMap
+       }).on('markgeocode', function(e) {
+           let latlng = e.geocode.center;
+           marker.setLatLng(latlng);
+           mapModal.setView(latlng, 14); // Zoom na localização
+           document.getElementById("id_latitude").value = latlng.lat;
+           document.getElementById("id_longitude").value = latlng.lng;
+       }).addTo(mapModal);
+   }
+   
+   
+   // Função para fechar o modal
+   function closeModal() {
+       document.getElementById('petModal').style.display = 'none';
+   }
 </script>
-
-
 <!-- Estilo do Modal -->
- <link rel="stylesheet" href="{% static 'css/modal.css' %}">
-
-
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
 <br><br><br><br><br><br><br><br><br>
-
-

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-   <head>
-      {% load static %} <!-- Carregar as tags estáticas -->
-      <meta charset="UTF-8">
-      <title>Detalhes do Pet</title>
+
+      {% load static %}
+
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
       <!-- Incluir o Leaflet -->
@@ -16,7 +14,6 @@
          #map {
          width: 100%;
          height: 400px;
-       
          }
          .carousel {
          width: 100%;
@@ -79,9 +76,9 @@
          padding: 10px;
          background: #f7aa90;
          }
+         .status {line-height: 40px;}
       </style>
-   </head>
-   <body>
+
       <div class="container">
          <div class="row">
             <!-- Carrossel de imagens -->
@@ -106,14 +103,15 @@
                <span class="visually-hidden">Próximo</span>
                </button>
             </div>
-            <div class="col col-sm-12 col-md-6 col-lg-6">
+
+            <!-- Detalhes do pet -->
+            <div class="col col-sm-12 col-md-8 col-lg-8">
                <div class="row">
-                  <div class="col col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-8">
-                 
+                  <div class="col col-sm-12 col-md-8 col-lg-8">
                      <h2>{{ pet.nome }}</h2>
                   </div>
-                  <div class="col col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
-                     <i class="fas fa-info-circle"></i> <strong>Status:</strong><br>
+                  <div class="col col-sm-12 col-md-4 col-lg-4">
+                     <i class="fas fa-info-circle"></i> <strong class="status">Status:</strong> 
                      {% if pet.tipo == 'encontrado' %}
                      <p class="btn  px-3 encontrado ">{{ pet.tipo|title }}</p>
                      {% elif pet.tipo == 'perdido' %}
@@ -122,38 +120,26 @@
                      <p class="btn btn-secondary px-3 perdido">{{ pet.tipo|title }}</p>
                      {% endif %}
                   </div>
-                  <p class="col col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
-                     {% if pet.especie == 'Cachorro' %}
-                     <i class="fas fa-dog"></i> <strong>Espécie:</strong> <br> Cachorro
-                     {% elif pet.especie == 'Gato' %}
-                     <i class="fas fa-cat"></i> <strong>Espécie:</strong> <br>Gato
-                     {% else %}
-                     <i class="fas fa-paw"></i> <strong>Espécie:</strong> <br> {{ pet.especie }}
-                     {% endif %}
-                  </p>
-                  <p class="col col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4"><i class="fas fa-arrows-alt-v"></i> <strong>Porte:<br></strong> {{ pet.porte }}</p>
-                  <p class="col col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4"> <i class="fas fa-palette"></i> <strong>Cor:<br></strong> {{ pet.cor }}</p>
-                  <p class="col col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12"><i class="fas fa-file-alt"></i> <strong>Detalhes:<br></strong> {{ pet.detalhes }}</p>
-                  <p class="col col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6"><i class="fas fa-map-marker-alt"></i> <strong>Localização:<br></strong> {{ pet.localizacao }}</p>
-                  <p class="col col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6"><i class="fas fa-calendar-alt"></i> <strong>Data e Hora:<br></strong> {{ pet.data_hora }}</p>
-                  <p class="col col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6"><i class="fas fa-envelope"></i> <strong>Email de Contato:<br></strong> {{ pet.email_contato }}</p>
-                  <p class="col col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6"><i class="fas fa-phone-alt"></i> <strong>Telefone de Contato:<br></strong> {{ pet.telefone_contato }}</p>
-                    <input type="hidden" id="pet-latitude" value="{{ latitude }}">
-                    <input type="hidden" id="pet-longitude" value="{{ longitude }}">
-
-                    <script>
-                        console.log('Latitude:', "{{ pet.latitude }}");
-                        console.log('Longitude:', "{{ pet.longitude }}");
-                    </script>
-
-                    <div id="mapModal" style="width: 100%; height: 400px;"></div> 
-                  
+                  <p class="col col-sm-12 col-md-4 col-lg-4"><i class="fas fa-dog"></i> <strong>Espécie:</strong><br> {{ pet.especie }}</p>
+                  <p class="col col-sm-12 col-md-4 col-lg-4"><i class="fas fa-arrows-alt-v"></i> <strong>Porte:</strong> <br>{{ pet.porte }}</p>
+                  <p class="col col-sm-12 col-md-4 col-lg-4"><i class="fas fa-palette"></i> <strong>Cor:</strong> <br>{{ pet.cor }}</p>
+                  <p class="col col-sm-12 col-md-12 col-lg-12"><i class="fas fa-file-alt"></i> <strong>Detalhes:</strong><br> {{ pet.detalhes }}</p>
+                  <p class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-map-marker-alt"></i> <strong>Localização:</strong> <br>{{ pet.address }}</p>
+                  <p class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-calendar-alt"></i> <strong>Data e Hora:</strong> <br>{{ pet.data_hora }}</p>
+                  <p class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-envelope"></i> <strong>Email de Contato:</strong> <br>{{ pet.email_contato }}</p>
+                  <p class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-phone-alt"></i> <strong>Telefone de Contato:</strong> <br>{{ pet.telefone_contato }}</p>
+                  <input type="hidden" id="pet-latitude" value="{{ latitude }}">
+                  <input type="hidden" id="pet-longitude" value="{{ longitude }}">
+                 
                </div>
             </div>
          </div>
+        <h2>Última localização conhecida</h2>
+                  <div id="mapModal" style="width: 100%; height: 400px;"></div>
+      <br><br><br>
       </div>
-       
-      
-      
-   </body>
-</html>
+
+
+
+
+

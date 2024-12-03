@@ -55,8 +55,15 @@ urlpatterns = [
 
     path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
+path('mapa/', views.reverse_geocode, name='mapa'),
+
     path('admin/', admin.site.urls)
+
+
 ]
+
+
+
 
 
 if settings.DEBUG:

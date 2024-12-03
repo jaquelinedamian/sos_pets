@@ -9,6 +9,8 @@ from django.contrib import messages
 from .forms import PetForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from decimal import Decimal
+import requests
 
 def sucesso(request):
     return render(request, 'core/sucesso.html')
@@ -147,3 +149,32 @@ def lista_pets(request):
 def mapa_pets(request):
     pets = Pet.objects.all()
     return render(request, 'core/mapa_pets.html', {'pets': pets})
+
+
+
+
+
+import requests
+from django.shortcuts import render
+
+def reverse_geocode(request):
+    # Token da API do LocationIQ
+    api_token = "pk.227bb16be8af10a97550047d4932e148"
+
+    # Latitude e longitude (exemplo)
+    latitude = request.GET.get('lat', '-23.55052')  # Default: São Paulo
+    longitude = request.GET.get('lon', '-46.633308')  # Default: São Paulo
+
+    # URL da API
+    url = f"https://eu1.locationiq.com/v1/reverse.php?key={api_token}&lat={latitude}&lon={longitude}&format=json"
+
+    # Requisição à API
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Gera erro se a requisição falhar
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        data = {"error": str(e)}
+
+    return render(request, 'core/mapa.html', {'location_data': data})
+
