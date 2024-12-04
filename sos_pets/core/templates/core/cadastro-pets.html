@@ -1,10 +1,6 @@
 {% include 'core/header.html' %}
 {% load static %} <!-- Carregar as tags estáticas -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa com Pesquisa por Endereço</title>
 
      <!-- Incluir o Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -24,8 +20,8 @@
             height: 400px;
     
         }
+        #search-button {margin-top: 20px;}
     </style>
-</head>
 
 <div class="container">
    <div class="form-container">
@@ -113,10 +109,24 @@
                   </div>
 
                
-  <div class="form-group">
-    <label for="address">Região onde foi perdido /  encontrado:</label>
-    <input type="text" id="address" name="address" class="form-control" placeholder="Clique no mapa ou edite o endereço" required>
+<div class="form-group">
+    <label for="address">Região onde foi perdido / encontrado:</label>
+    <div class="input-group">
+         
+        <input
+            type="text"
+            id="address"
+            name="address"
+            class="form-control"
+            placeholder="Clique no mapa ou edite o endereço"
+            list="suggestions"
+            required>
+
+        <button id="search-button" type="button" class="btn btn-primary">Buscar localização</button>
+    </div>
+    <datalist id="suggestions"></datalist>
 </div>
+
  <div class="form-group" style="display: none;">
     <label for="latitude"><strong>Latitude:</strong></label>
     <input type="text" id="latitude" name="latitude" class="form-control" readonly>
@@ -144,126 +154,122 @@
 </div>
 
 <script>
-    // API Key do LocationIQ (substitua pela sua)
-    const apiToken = "pk.227bb16be8af10a97550047d4932e148";
+// API Key do LocationIQ (substitua pela sua)
+const apiToken = "pk.227bb16be8af10a97550047d4932e148";
 
-    // Inicializar o mapa centrado em São Paulo
-    const map = L.map('map').setView([-23.628018630115747, -46.56819156666596], 16);
+// Inicializar o mapa centrado em São Paulo
+const map = L.map('map').setView([-23.628018630115747, -46.56819156666596], 16);
 
-    // Adiciona o mapa base do OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
+// Adiciona o mapa base do OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+}).addTo(map);
 
-    // Adicionar marcador para selecionar a localização
-    let marker = L.marker([-23.628018630115747, -46.56819156666596], { draggable: true }).addTo(map);
+// Adicionar marcador para selecionar a localização
+let marker = L.marker([-23.628018630115747, -46.56819156666596], { draggable: true }).addTo(map);
 
-    // Função para atualizar as coordenadas e o endereço
-    function updateLocation(lat, lng) {
-        // Atualizar os valores dos inputs de latitude e longitude
-        const latitudeInput = document.getElementById('latitude');
-        const longitudeInput = document.getElementById('longitude');
-        latitudeInput.value = lat.toFixed(6);
-        longitudeInput.value = lng.toFixed(6);
+// Atualizar coordenadas e endereço no formulário
+function updateLocation(lat, lng) {
+    // Atualizar os valores dos inputs de latitude e longitude
+    document.getElementById('latitude').value = lat.toFixed(6);
+    document.getElementById('longitude').value = lng.toFixed(6);
 
-        // Buscar endereço usando a API de Reverse Geocoding do LocationIQ
-        fetch(`https://eu1.locationiq.com/v1/reverse.php?key=${apiToken}&lat=${lat}&lon=${lng}&format=json`)
+    // Buscar endereço usando a API de Reverse Geocoding do LocationIQ
+    fetch(`https://eu1.locationiq.com/v1/reverse.php?key=${apiToken}&lat=${lat}&lon=${lng}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            const addressDetails = data.address;
+            const formattedAddress = [
+                addressDetails.road || '',
+                addressDetails.house_number || '',
+                addressDetails.neighbourhood || '',
+                addressDetails.city || addressDetails.town || addressDetails.village || '',
+                addressDetails.state || ''
+            ].filter(Boolean).join(', ');
+
+            document.getElementById('address').value = formattedAddress;
+        })
+        .catch(error => {
+            console.error('Erro ao buscar o endereço:', error);
+            document.getElementById('address').value = 'Erro ao buscar endereço';
+        });
+}
+
+// Atualizar localização ao clicar no mapa
+map.on('click', function (e) {
+    const { lat, lng } = e.latlng;
+    marker.setLatLng([lat, lng]); // Move o marcador para o local clicado
+    updateLocation(lat, lng);
+});
+
+// Atualizar localização ao arrastar o marcador
+marker.on('dragend', function (e) {
+    const { lat, lng } = e.target.getLatLng();
+    updateLocation(lat, lng);
+});
+
+// Atualizar a localização inicial
+updateLocation(-23.628018630115747, -46.56819156666596);
+
+// Referência aos elementos de endereço e sugestões
+const addressInput = document.getElementById('address');
+const suggestionsList = document.getElementById('suggestions');
+
+// Evento do botão "Buscar"
+document.getElementById('search-button').addEventListener('click', function () {
+    const query = addressInput.value;
+
+    if (query.length > 2) { // Iniciar busca após 3 caracteres
+        fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${query}&format=json&limit=5`)
             .then(response => response.json())
             .then(data => {
-                // Formatar o endereço para exibir apenas rua, número, bairro, cidade e estado
-                const addressDetails = data.address;
-                const formattedAddress = [
-                    addressDetails.road || '',            // Nome da rua
-                    addressDetails.house_number || '',    // Número da casa
-                    addressDetails.neighbourhood || '',   // Bairro
-                    addressDetails.city || addressDetails.town || addressDetails.village || '', // Cidade
-                    addressDetails.state || ''            // Estado
-                ].filter(Boolean).join(', '); // Remove campos vazios e junta com vírgulas
+                suggestionsList.innerHTML = ''; // Limpar sugestões anteriores
 
-                // Exibir o endereço formatado no campo editável
-                document.getElementById('address').value = formattedAddress;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar o endereço:', error);
-                document.getElementById('address').value = 'Erro ao buscar endereço';
-            });
-    }
-
-    // Atualizar localização ao clicar no mapa
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
-        marker.setLatLng([lat, lng]); // Move o marcador para o local clicado
-        updateLocation(lat, lng);
-    });
-
-    // Atualizar localização ao arrastar o marcador
-    marker.on('dragend', function (e) {
-        const { lat, lng } = e.target.getLatLng();
-        updateLocation(lat, lng);
-    });
-
-    // Atualizar a localização inicial
-    updateLocation(-23.628018630115747, -46.56819156666596);
-
-    // Autocomplete API para o campo de endereço
-    const addressInput = document.getElementById('address');
-    addressInput.addEventListener('input', function () {
-        const query = addressInput.value;
-        if (query.length > 2) { // Começar a pesquisa após digitar 3 caracteres
-            fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${query}&format=json&limit=5`)
-                .then(response => response.json())
-                .then(data => {
-                    const suggestions = data.map(result => {
-                        // Formatar as sugestões de endereço (apenas rua, bairro, cidade e estado)
-                        const addressDetails = result.address;
-                        return [
-                            addressDetails.road || '',
-                            addressDetails.house_number || '',
-                            addressDetails.neighbourhood || '',
-                            addressDetails.city || addressDetails.town || addressDetails.village || '',
-                            addressDetails.state || ''
-                        ].filter(Boolean).join(', '); // Remove campos vazios e junta com vírgulas
-                    });
-
-                    // Exibir as sugestões no datalist
-                    const dataList = document.createElement('datalist');
-                    suggestions.forEach(suggestion => {
-                        const option = document.createElement('option');
-                        option.value = suggestion;
-                        dataList.appendChild(option);
-                    });
-                    addressInput.setAttribute('list', 'suggestions');
-                    addressInput.parentElement.appendChild(dataList);
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar sugestões de endereço:', error);
+                data.forEach(result => {
+                    const option = document.createElement('option');
+                    option.value = result.display_name; // Nome completo do endereço
+                    option.dataset.lat = result.lat; // Latitude do endereço
+                    option.dataset.lon = result.lon; // Longitude do endereço
+                    suggestionsList.appendChild(option);
                 });
-        }
-    });
 
-    // Atualizar o marcador e o mapa quando o usuário selecionar um endereço no autocomplete
-    addressInput.addEventListener('change', function () {
-        const address = addressInput.value;
-
-        // Buscar coordenadas (latitude e longitude) para o endereço digitado
-        fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${address}&format=json&limit=1`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const { lat, lon } = data[0];
-
-                    // Atualizar o marcador no mapa e a localização
-                    marker.setLatLng([lat, lon]);
-                    map.setView([lat, lon], 16); // Ajustar o zoom do mapa
-
-                    // Atualizar as coordenadas e o endereço
-                    updateLocation(lat, lon);
+                if (data.length === 0) {
+                    alert('Nenhum endereço encontrado. Tente novamente com outra busca.');
                 }
             })
             .catch(error => {
-                console.error('Erro ao buscar coordenadas para o endereço:', error);
+                console.error('Erro ao buscar sugestões de endereço:', error);
+                alert('Erro ao buscar o endereço. Por favor, tente novamente.');
             });
-    });
+    } else {
+        alert('Digite ao menos 3 caracteres para buscar.');
+    }
+});
+
+// Atualizar marcador e mapa ao selecionar um endereço
+addressInput.addEventListener('change', function () {
+    const address = addressInput.value;
+
+    // Buscar coordenadas (latitude e longitude) para o endereço digitado
+    fetch(`https://eu1.locationiq.com/v1/search.php?key=${apiToken}&q=${address}&format=json&limit=1`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const { lat, lon } = data[0];
+
+                // Atualizar o marcador no mapa e a localização
+                marker.setLatLng([lat, lon]);
+                map.setView([lat, lon], 16); // Ajustar o zoom do mapa
+
+                // Atualizar as coordenadas e o endereço
+                updateLocation(lat, lon);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar coordenadas para o endereço:', error);
+        });
+});
+
 </script>
 
     
