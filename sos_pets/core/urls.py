@@ -55,7 +55,8 @@ urlpatterns = [
 
     path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
-path('mapa/', views.reverse_geocode, name='mapa'),
+    path('api/pets/', views.api_pets, name='api_pets'),
+
 
     path('admin/', admin.site.urls)
 

@@ -146,35 +146,34 @@ def lista_pets(request):
     pets = Pet.objects.all()
     return render(request, 'core/lista_pets.html', {'pets': pets})
 
+
 def mapa_pets(request):
     pets = Pet.objects.all()
     return render(request, 'core/mapa_pets.html', {'pets': pets})
 
 
+from django.http import JsonResponse
+from .models import Pet
 
 
+def api_pets(request):
+    pets = Pet.objects.all()
+    pet_data = []
 
-import requests
-from django.shortcuts import render
+    for pet in pets:
+        pet_data.append({
+            'nome': pet.nome,
+            'tipo': pet.tipo,
+            'especie': pet.especie,
+            'address': pet.address,
+            'data_hora': pet.data_hora,
 
-def reverse_geocode(request):
-    # Token da API do LocationIQ
-    api_token = "pk.227bb16be8af10a97550047d4932e148"
+            'latitude': pet.latitude,
+            'longitude': pet.longitude,
+            'imagem1': pet.imagem1.url if pet.imagem1 else None,  # Inclui a URL da imagem
+        })
 
-    # Latitude e longitude (exemplo)
-    latitude = request.GET.get('lat', '-23.55052')  # Default: São Paulo
-    longitude = request.GET.get('lon', '-46.633308')  # Default: São Paulo
+    return JsonResponse(pet_data, safe=False)
 
-    # URL da API
-    url = f"https://eu1.locationiq.com/v1/reverse.php?key={api_token}&lat={latitude}&lon={longitude}&format=json"
 
-    # Requisição à API
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Gera erro se a requisição falhar
-        data = response.json()
-    except requests.exceptions.RequestException as e:
-        data = {"error": str(e)}
-
-    return render(request, 'core/mapa.html', {'location_data': data})
 
