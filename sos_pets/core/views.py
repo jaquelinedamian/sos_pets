@@ -65,9 +65,7 @@ def conta(request):
 def faq(request):
     return render(request, 'core/faq.html')
 
-@login_required
-def meus_anuncios(request):
-    return render(request, 'core/meus-anuncios.html')
+
 
 def cadastro(request):
     if request.user.is_authenticated:
@@ -132,6 +130,10 @@ def detalhes_pet(request, pet_id):
 
 
 
+
+
+
+
 @login_required
 def listar_usuarios(request):
     usuarios = Usuario.objects.all()
@@ -145,6 +147,14 @@ def pets(request, pet_id):
 def lista_pets(request):
     pets = Pet.objects.all()
     return render(request, 'core/lista_pets.html', {'pets': pets})
+
+
+@login_required
+def meus_anuncios(request):
+    pets = Pet.objects.all()
+    return render(request, 'core/meus-anuncios.html',  {'pets': pets})
+
+
 
 
 def mapa_pets(request):
@@ -174,6 +184,4 @@ def api_pets(request):
         })
 
     return JsonResponse(pet_data, safe=False)
-
-
 

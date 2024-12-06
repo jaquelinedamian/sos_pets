@@ -1,5 +1,10 @@
+{% load static %} <!-- Carregar as tags estáticas -->
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
     <style>
         #map {
             height: 600px; /* Define a altura do mapa */
@@ -47,103 +52,123 @@
 
     <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Inicializa o mapa com a localização padrão
-        let map = L.map('map').setView([-23.5505, -46.6333], 16); // São Paulo como localização inicial
 
-        // Adiciona a camada de tiles do OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
+   <script>
+       
+       
+       
+    // Inicializa o mapa com a localização padrão
+    let map = L.map('map').setView([-23.5505, -46.6333], 16); // São Paulo como localização inicial
 
-        // Cria os ícones personalizados
-        const iconEncontrado = L.icon({
-            iconUrl: '/static/img/small-green-cutout.png',  // Caminho do ícone para pets encontrados
-            iconSize: [31, 43],  // Tamanho do ícone
-            iconAnchor: [15, 30],  // Posição do ancoramento do ícone (onde ele "aponta")
-            popupAnchor: [0, -30]  // Posição do popup em relação ao ícone
+    // Adiciona a camada de tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Adiciona o controle de geocodificação (barra de busca)
+    L.Control.geocoder({
+        defaultMarkGeocode: false // Evita adicionar automaticamente o marcador ao buscar
+    }).on('markgeocode', function(e) {
+        const latlng = e.geocode.center;
+
+        // Adiciona um marcador no local encontrado
+        L.marker(latlng).addTo(map)
+            .bindPopup(e.geocode.name)
+            .openPopup();
+
+        // Centraliza o mapa na localização encontrada
+        map.setView(latlng, 16);
+    }).addTo(map);
+
+    // Cria os ícones personalizados
+    const iconEncontrado = L.icon({
+        iconUrl: '/static/img/small-green-cutout.png', // Caminho do ícone para pets encontrados
+        iconSize: [31, 43], // Tamanho do ícone
+        iconAnchor: [15, 30], // Posição do ancoramento do ícone (onde ele "aponta")
+        popupAnchor: [0, -30] // Posição do popup em relação ao ícone
+    });
+
+    const iconPerdido = L.icon({
+        iconUrl: '/static/img/small-red-cutout.png', // Caminho do ícone para pets perdidos
+        iconSize: [31, 43], // Tamanho do ícone
+        iconAnchor: [15, 30], // Posição do ancoramento do ícone (onde ele "aponta")
+        popupAnchor: [0, -30] // Posição do popup em relação ao ícone
+    });
+
+    // Função para formatar a data para o formato dd/mm/aaaa
+    function formatarData(dataISO) {
+        const data = new Date(dataISO);
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
+        const ano = data.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+    }
+
+    // Função para adicionar marcadores no mapa
+    function adicionarMarcadores(pets) {
+        pets.forEach(pet => {
+            if (pet.latitude && pet.longitude) {
+                let markerIcon = pet.tipo === 'encontrado' ? iconEncontrado : iconPerdido;
+
+                let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
+
+                // Formata a data do pet
+                const dataFormatada = formatarData(pet.data_hora);
+
+                let content = `
+                    <div class="info-box">
+                        ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
+                        <br><br>
+                        <h3>${pet.nome}</h3>
+                        <p><strong style="text-transform: uppercase;">${pet.tipo} em ${dataFormatada}</strong><br>
+                        <strong>Espécie:</strong> ${pet.especie}<br>
+                        <strong>Endereço:</strong> ${pet.address}</p>
+                        <button class="btn btn-primary" onclick="openModal('{{ pet.id }}')">Ver detalhes</button>
+                    </div>
+                `;
+
+                marker.bindPopup(content);
+            }
         });
+    }
 
-        const iconPerdido = L.icon({
-            iconUrl: '/static/img/small-red-cutout.png',  // Caminho do ícone para pets perdidos
-            iconSize: [31, 43],  // Tamanho do ícone
-            iconAnchor: [15, 30],  // Posição do ancoramento do ícone (onde ele "aponta")
-            popupAnchor: [0, -30]  // Posição do popup em relação ao ícone
-        });
-
-        // Função para formatar a data para o formato dd/mm/aaaa
-        function formatarData(dataISO) {
-            const data = new Date(dataISO);
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
-            const ano = data.getFullYear();
-            return `${dia}/${mes}/${ano}`;
-        }
-
-        // Função para adicionar marcadores no mapa
-        function adicionarMarcadores(pets) {
-            pets.forEach(pet => {
-                if (pet.latitude && pet.longitude) {
-                    let markerIcon = pet.tipo === 'encontrado' ? iconEncontrado : iconPerdido;
-
-                    let marker = L.marker([pet.latitude, pet.longitude], { icon: markerIcon }).addTo(map);
-
-                    // Formata a data do pet
-                    const dataFormatada = formatarData(pet.data_hora);
-
-                    let content = `
-                        <div class="info-box">
-                            ${pet.imagem1 ? `<img src="${pet.imagem1}" alt="Imagem do ${pet.nome}" style="width: 100%; height: 100px; object-fit: cover;">` : ''}
-                            <br><br>
-                            <h3>${pet.nome}</h3>
-                            <p><strong style="text-transform: uppercase;">${pet.tipo} em ${dataFormatada}</strong><br>
-                            <strong>Espécie:</strong> ${pet.especie}<br>
-                            <strong>Endereço:</strong> ${pet.address}</p>
-                            <button class="btn btn-primary" onclick="openModal('${pet.id}')">Ver detalhes</button>
-                        </div>
-                    `;
-
-                    marker.bindPopup(content);
+    // Função que busca a lista de pets e chama a função de adicionar marcadores
+    function carregarPets() {
+        fetch('/api/pets/')
+            .then(response => response.json())
+            .then(pets => {
+                if (pets.length === 0) {
+                    console.log("Nenhum pet encontrado!");
+                } else {
+                    adicionarMarcadores(pets);
                 }
+            })
+            .catch(error => {
+                console.error('Erro ao carregar pets:', error);
             });
-        }
+    }
 
-        // Função que busca a lista de pets e chama a função de adicionar marcadores
-        function carregarPets() {
-            fetch('/api/pets/')
-                .then(response => response.json())
-                .then(pets => {
-                    if (pets.length === 0) {
-                        console.log("Nenhum pet encontrado!");
-                    } else {
-                        adicionarMarcadores(pets);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar pets:', error);
-                });
-        }
+    // Função para obter a localização do usuário via IP
+    function obterLocalizacaoUsuario() {
+        fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
+            .then(response => response.json())
+            .then(data => {
+                const { loc } = data; // Recebe a localização
+                const [latitude, longitude] = loc.split(',');
 
-        // Função para obter a localização do usuário via IP
-        function obterLocalizacaoUsuario() {
-            fetch('https://ipinfo.io/json?token=91e3040b4f78f5')
-                .then(response => response.json())
-                .then(data => {
-                    const { loc } = data;  // Recebe a localização
-                    const [latitude, longitude] = loc.split(',');
+                // Atualiza o mapa para focar na localização do usuário
+                map.setView([latitude, longitude], 12);
+            })
+            .catch(error => {
+                console.error('Erro ao obter a localização do usuário:', error);
+            });
+    }
 
-                    // Atualiza o mapa para focar na localização do usuário
-                    map.setView([latitude, longitude], 12);
-                })
-                .catch(error => {
-                    console.error('Erro ao obter a localização do usuário:', error);
-                });
-        }
+    // Carrega os pets no mapa
+    carregarPets();
 
-        // Carrega os pets no mapa
-        carregarPets();
+    // Obtém a localização do usuário e atualiza o mapa
+    obterLocalizacaoUsuario();
+</script>
 
-        // Obtém a localização do usuário e atualiza o mapa
-        obterLocalizacaoUsuario();
-    </script>
+    

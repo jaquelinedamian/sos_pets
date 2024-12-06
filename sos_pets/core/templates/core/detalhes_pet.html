@@ -111,7 +111,7 @@
                      <h2>{{ pet.nome }}</h2>
                   </div>
                   <div class="col col-sm-12 col-md-4 col-lg-4">
-                     <i class="fas fa-info-circle"></i> <strong class="status">Status:</strong> 
+                     <i class="fas fa-info-circle"></i> <strong class="status">Status:</strong>
                      {% if pet.tipo == 'encontrado' %}
                      <p class="btn  px-3 encontrado ">{{ pet.tipo|title }}</p>
                      {% elif pet.tipo == 'perdido' %}
@@ -130,7 +130,7 @@
                   <p class="col col-sm-12 col-md-6 col-lg-6"><i class="fas fa-phone-alt"></i> <strong>Telefone de Contato:</strong> <br>{{ pet.telefone_contato }}</p>
                   <input type="hidden" id="pet-latitude" value="{{ latitude }}">
                   <input type="hidden" id="pet-longitude" value="{{ longitude }}">
-                 
+
                </div>
             </div>
          </div>
@@ -141,5 +141,7 @@
 
 
 
+<input type="hidden" id="pet-latitude" value="{{ pet.latitude }}">
+<input type="hidden" id="pet-longitude" value="{{ pet.longitude }}">
 
 
