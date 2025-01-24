@@ -58,8 +58,11 @@ urlpatterns = [
     path('api/pets/', views.api_pets, name='api_pets'),
 
 
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
 
+    path('fluxo_senha/', views.fluxo_senha, name='fluxo_senha'),
+
+        path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
 ]
 

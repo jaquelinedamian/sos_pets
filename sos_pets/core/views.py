@@ -185,3 +185,8 @@ def api_pets(request):
 
     return JsonResponse(pet_data, safe=False)
 
+def fluxo_senha(request):
+    return render(request, 'core/fluxo_senha.html')
+
+def mapa_pets(request):
+    return render(request, 'core/mapa_pets.html')

@@ -33,9 +33,47 @@
                 {% endif %}
             </form>
 
-            <p align="center">Esqueci a senha   |   Criar cadastro</p>
+             <p align="center"> <a onclick="openModal(petModal)">Esqueci a senha </a> |   <a href="{% url 'cadastro' %}">Criar cadastro</a></p>
          </div>
       </div>
    </div>
 </div>
+
+<!-- Modal -->
+<div id="petModal" class="modal" style="display: none; z-index: 1;">
+   <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalContent">
+        
+       
+      </div>
+   </div>
+</div>
+
+<script>
+   function openModal() {
+       // Fazendo o fetch para pegar o conteúdo da página fluxo_senha
+       fetch('/fluxo_senha/')
+           .then(response => response.text()) // Pegando o conteúdo em formato de texto
+           .then(data => {
+               // Coloca o conteúdo dentro do modal
+               document.getElementById('modalContent').innerHTML = data;
+               // Exibe o modal
+               document.getElementById('petModal').style.display = 'block';
+           })
+           .catch(error => console.error('Erro ao carregar a página fluxo_senha:', error));
+   }
+
+   // Função para fechar o modal
+   function closeModal() {
+       document.getElementById('petModal').style.display = 'none';
+   }
+</script>
+
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+
+
 {% include 'core/footer.html' %}
+
+
+    
