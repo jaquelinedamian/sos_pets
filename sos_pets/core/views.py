@@ -190,3 +190,9 @@ def fluxo_senha(request):
 
 def mapa_pets(request):
     return render(request, 'core/mapa_pets.html')
+
+def politica(request):
+    return render(request, 'core/politica.html')
+
+def termos(request):
+    return render(request, 'core/termos.html')

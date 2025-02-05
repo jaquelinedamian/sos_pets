@@ -64,6 +64,10 @@ urlpatterns = [
 
         path('mapa-pets/', views.mapa_pets, name='mapa_pets'),
 
+    path('politica', views.politica, name='politica'),
+
+    path('termos', views.termos, name='termos'),
+
 ]
 
 
