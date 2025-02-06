@@ -3,9 +3,10 @@ from django import forms
 from .models import Usuario, Pet
 
 class UsuarioForm(forms.ModelForm):
+    termos = forms.BooleanField(required=True, error_messages={'required': 'Você deve concordar com os termos e condições e a política de privacidade para se cadastrar.'})
     class Meta:
         model = Usuario
-        fields = ['nome', 'email', 'telefone', 'rede_social', 'image']  # Exclua 'user' caso não seja necessário
+        fields = ['nome', 'email', 'telefone', 'rede_social', 'image', 'termos']  # Exclua 'user' caso não seja necessário
 
 class PetForm(forms.ModelForm):
     class Meta:

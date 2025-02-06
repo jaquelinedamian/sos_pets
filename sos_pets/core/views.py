@@ -9,6 +9,8 @@ from django.contrib import messages
 from .forms import PetForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.db import IntegrityError  # Para capturar erros do banco de dados
+
 from decimal import Decimal
 import requests
 

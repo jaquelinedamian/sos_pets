@@ -1,15 +1,19 @@
+     
+      <div class="container">
+         <div class="row">
+               <div class="p-2">
+                   
+                   <br>    <br>    <br>
+                   <h2>Esqueceu a sua senha?</h2>
+                   <p>Enviaremos um e-mail com instruções de como redefinir a senha</p>
+
       <form method="POST">
                 {% csrf_token %}                
-                <div class="form-group">
-                    <label for="{{ form.username.id_for_label }}">Nome de Usuário:</label><br>
-                    {{ form.username }}
-                </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.password.id_for_label }}">Senha:</label><br>
-                    {{ form.password }}
-                </div>
-            
+               <div class="form-group">
+                     <!-- Campo de Email -->
+                     <label for="email">Email:</label>
+                     <input type="email" id="email" name="email" class="form-control">
+                  </div>
                 <br>
                 <button type="submit" class="btn btn-primary btn-block">Entrar</button>
             
@@ -21,3 +25,9 @@
                 </ul>
                 {% endif %}
             </form>
+               
+                  
+    <br><br><br>
+    
+               </div></div></div>
+    
